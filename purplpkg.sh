@@ -2,6 +2,9 @@
 
 set -e
 
+# Raise CPU frequency for faster downloads/installs
+echo 1267200 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+
 INSTALL_DIR="/data/purplpkg"
 
 if [ ! -d /data/purplpkg ]; then
@@ -34,17 +37,20 @@ fi
 
 echo Installing package "$2" from "$BASE_URL"
 curl -o /data/purplpkg/"$2".tar.gz "$BASE_URL"/"$2".tar.gz
-gunzip /data/purplpkg/"$2".tar.gz
-mkdir "$2"
-mv "$2".tar "$2"/
-cd "$2"
-tar -xvf "$2".tar
-mv * /sbin
-cd ..
-echo "Cleaning up..."
-rm -rf "$2"
-echo "Package "$2" installed in /sbin"
-exit
+
+if [[ ! "$2" == anki-* ]]; then
+ gunzip /data/purplpkg/"$2".tar.gz
+ mkdir "$2"
+ mv "$2".tar "$2"/
+ cd "$2"
+ tar -xvf "$2".tar
+ mv * /sbin
+ cd ..
+ echo "Cleaning up..."
+ rm -rf "$2"
+ echo 'Package "$2" installed in /sbin'
+ exit
+fi
 
 if [[ "$2" == anki-* ]]; then
  echo Package is an anki folder
@@ -58,10 +64,13 @@ if [[ "$2" == anki-* ]]; then
  mount -o rw,remount / 
  echo Package is an anki folder     
  echo Uncompress anki folder
- gunzip /data/purplpkg/anki.tar.gz
- tar -xvf /data/purplpkg/anki.tar
+ gunzip /data/purplpkg/"$2".tar.gz
+ tar -xvf /data/purplpkg/"$2".tar
  rm -rf /anki
  mv /data/purplpkg/anki /anki
  echo Done
  systemctl start anki-robot.target
 fi
+
+#Lower frequency back to "balaned" wire_d preset
+echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
