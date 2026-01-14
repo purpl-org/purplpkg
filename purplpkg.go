@@ -19,5 +19,15 @@ if len(os.Args) < 2 {
     fmt.Println("package-list: Lists currently available packages")
     os.Exit(1)
 }
-  
+
+  switch os.Args[1] {
+    case "install":
+     fmt.Println("coming soon idk")
+     os.Exit(0)
+    case "package-list":
+     cmd := exec.Command("curl", "https://www.froggitti.net/vector-mirror/package.list")
+     output, _ := cmd.Output()
+     fmt.Println(string(output))
+     os.Exit(0)
+    }
 }
