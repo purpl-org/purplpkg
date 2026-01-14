@@ -25,13 +25,13 @@ fi
 #fi
 
 if [ "$1" == "remove" ]; then
- if [ ! -f /sbin/"$2" ]; then
-  echo "Package "$2" doesn't exist."
-  exit 1
- else 
-  rm /sbin/$2*
-  echo "Package "$2" removed."
- exit 0
+  if [ ! -f /sbin/"$2" ]; then
+   echo "Package \"$2\" doesn't exist."
+   exit 1
+  else 
+   rm /sbin/$2* 2>/dev/null || true  
+   echo "Package \"$2\" removed."
+  exit 0
  fi
 fi
 
