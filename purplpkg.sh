@@ -5,27 +5,20 @@ if [ ! -d /data/purplpkg ]; then
 fi
 
 set -e
-
 mount -o rw,remount /
-
 rm -rf /data/purplpkg/*
-
 cd /data/purplpkg
 
-echo $PWD
+BASE_URL="https://www.froggitti.net/vector-mirror/"
+BASE_URL_2="https://purplpkg.net-3.froggitti.net/"
 
 if [ "$1" == "package-list" ]; then
  curl https://www.froggitti.net/vector-mirror/package.list
  exit 0
 fi
 
-# Raise CPU frequency for faster downloads/installs
-echo 1267200 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
-
 # Made this but never ended up using it...
 #INSTALL_DIR="/data/purplpkg"
-
-BASE_URL="https://www.froggitti.net/vector-mirror/"
 
 if [ "$1" == "" ]; then
  echo purplpkg by purpl
@@ -33,7 +26,7 @@ if [ "$1" == "" ]; then
  echo Usage:
  echo install: Installs a package
  echo package-list: Lists currently available packages
- exit 1
+ exit 0
 fi
 
 #if [ "$1" == "update" ]; then
@@ -57,15 +50,25 @@ if [ "$2" == "" ]; then
  exit 1
 fi
 
+echo $PWD
+
+if [ ! "$PWD" == /data/purplpkg ]; then
+ echo "We are in the wrong directory. Exiting..."
+ exit 1
+fi
+
+# Raise CPU frequency for faster downloads/installs
+echo 1267200 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+
+echo Downloading package "$2" from "$BASE_URL"
+curl -o /data/purplpkg/"$2".tar.gz "$BASE_URL"/"$2".tar.gz
+
 if [[ "$2" == anki-* ]]; then
- echo Package is anki
+ echo Package is an anki folder
  echo Stop robot
  rm -rf /data/purplpkg/an*
  systemctl stop anki-robot.target
 fi
-
-echo Downloading package "$2" from "$BASE_URL"
-curl -o /data/purplpkg/"$2".tar.gz "$BASE_URL"/"$2".tar.gz
 
 if [[ ! "$2" == anki-* ]]; then
  echo "Installing..."
