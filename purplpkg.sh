@@ -48,7 +48,7 @@ if [[ ! "$2" == anki-* ]]; then
  cd ..
  echo "Cleaning up..."
  rm -rf "$2"
- echo 'Package "$2" installed in /sbin'
+ echo "Package "$2" installed in /sbin"
  exit
 fi
 
@@ -71,6 +71,3 @@ if [[ "$2" == anki-* ]]; then
  echo Done
  systemctl start anki-robot.target
 fi
-
-#Lower frequency back to "balaned" wire_d preset
-echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
