@@ -26,7 +26,7 @@ if [ "$2" == "" ]; then
 fi
 
 if [[ "$2" == anki-* ]]; then
- echo Package is anki
+ echo Package is an anki folder
  echo Stop robot
  rm -rf /data/purplpkg/an*
  systemctl stop anki-robot.target
