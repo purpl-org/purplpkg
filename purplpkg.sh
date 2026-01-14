@@ -29,7 +29,7 @@ if [ "$1" == "remove" ]; then
   echo "Package "$2" doesn't exist."
   exit 1
  else 
-  rm /sbin/"$2"
+  rm /sbin/"$2"*
   echo "Package "$2" removed."
  exit 0
  fi
