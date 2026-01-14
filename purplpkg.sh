@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+#set -e
 
 INSTALL_DIR="/data/purplpkg"
 
