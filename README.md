@@ -22,3 +22,6 @@ update-purplOS.tar
 update.sh being the file that goes into /sbin.
 ## Todo
 - Version checking for packages
+## Goals
+- Start a public FTP server for all to upload packages
+- Make it good idk
