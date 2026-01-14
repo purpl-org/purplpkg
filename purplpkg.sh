@@ -14,6 +14,11 @@ cd /data/purplpkg
 
 echo $PWD
 
+if [ "$1" == "package-list" ]; then
+ curl https://www.froggitti.net/vector-mirror/package.list
+ exit 0
+fi
+
 # Raise CPU frequency for faster downloads/installs
 echo 1267200 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 
