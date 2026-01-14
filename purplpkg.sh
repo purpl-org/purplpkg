@@ -58,10 +58,10 @@ if [[ "$2" == anki-* ]]; then
  mount -o rw,remount / 
  echo Package is an anki folder     
  echo Uncompress anki folder
- gunzip /data/purplpkg/"$2".tar.gz
- tar -xvf /data/purplpkg/"$2".tar
+ gunzip /data/purplpkg/anki.tar.gz
+ tar -xvf /data/purplpkg/anki.tar
  rm -rf /anki
- mv /data/purplpkg/"$2" /anki
+ mv /data/purplpkg/anki /anki
  echo Done
  systemctl start anki-robot.target
 fi
