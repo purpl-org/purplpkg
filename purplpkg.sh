@@ -80,16 +80,16 @@ if [[ ! "$2" == anki-* ]]; then
 fi
 
 if [[ "$2" == anki-* ]]; then
- echo Package is an anki folder
- echo Stop robot
- rm -rf /data/purplpkg/an*
+ echo "Package is an anki folder"
+ echo "Stop robot"
  systemctl stop anki-robot.target
- echo Uncompress anki folder
+ echo "Decompress anki folder"
  gunzip /data/purplpkg/"$2".tar.gz
- tar -xvf /data/purplpkg/"$2".tar
+ tar -xf /data/purplpkg/"$2".tar
  rm -rf /anki
+ echo "Install /anki folder"
  mv /data/purplpkg/anki /anki
- echo Done
+ echo "Done"
  systemctl start anki-robot.target
 fi
 
