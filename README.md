@@ -12,6 +12,7 @@ anki-purplOS.tar is then compressed with gzip to become anki-purplOS.tar.gz<br>
 The package manager expects this exact format, so if your structure differs it will not install correctly.
 ## Actual package handling
 The way the package manager installs packages is by downloading the tar.gz, uncompressing it then making its own directory for the actual package in /data/purplpkg.<br>
+
 Package structure should be as such<br>
 I will use update-purplOS.tar as an example
 ```
