@@ -24,6 +24,10 @@ if len(os.Args) < 2 {
     case "install":
      fmt.Println("coming soon idk")
      os.Exit(0)
+    case "mirror-list":
+     fmt.Println(mirrorMain)
+     fmt.Println(mirrorSecondary)
+     os.Exit(0)
     case "package-list":
      cmd := exec.Command("curl", "https://www.froggitti.net/vector-mirror/package.list")
      output, _ := cmd.Output()
