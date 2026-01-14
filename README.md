@@ -1,5 +1,5 @@
 # purplpkg
-Bash package manager for purplOS
+Bash package manager for Vector
 
 ## Anki folder handling
 Your .tar for the /anki folder should be formatted as such<br>
