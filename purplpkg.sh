@@ -10,6 +10,7 @@ rm -rf /data/purplpkg/*
 cd /data/purplpkg
 
 BASE_URL="https://www.froggitti.net/vector-mirror/"
+#https://purplpkg.net-3.froggitti.net/ will be a backup/secondary mirror - still need to set it up
 BASE_URL_2="https://purplpkg.net-3.froggitti.net/"
 
 if [ "$1" == "package-list" ]; then
@@ -31,7 +32,7 @@ fi
 
 #if [ "$1" == "update" ]; then
 # echo Update implementation not finished yet
-# exit
+# exit 1
 #fi
 
 #if [ "$1" == "remove" ]; then
@@ -63,13 +64,6 @@ echo 1267200 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 echo Downloading package "$2" from "$BASE_URL"
 curl -o /data/purplpkg/"$2".tar.gz "$BASE_URL"/"$2".tar.gz
 
-if [[ "$2" == anki-* ]]; then
- echo Package is an anki folder
- echo Stop robot
- rm -rf /data/purplpkg/an*
- systemctl stop anki-robot.target
-fi
-
 if [[ ! "$2" == anki-* ]]; then
  echo "Installing..."
  gunzip /data/purplpkg/"$2".tar.gz
@@ -87,15 +81,9 @@ fi
 
 if [[ "$2" == anki-* ]]; then
  echo Package is an anki folder
- echo Curl version
- curl -o /data/purplpkg/"$2".version "$BASE_URL"/"$2".version
- cat /data/purplpkg/"$2".version
- echo Function unfinished for now
-fi
-
-if [[ "$2" == anki-* ]]; then
- mount -o rw,remount / 
- echo Package is an anki folder     
+ echo Stop robot
+ rm -rf /data/purplpkg/an*
+ systemctl stop anki-robot.target
  echo Uncompress anki folder
  gunzip /data/purplpkg/"$2".tar.gz
  tar -xvf /data/purplpkg/"$2".tar
@@ -105,5 +93,5 @@ if [[ "$2" == anki-* ]]; then
  systemctl start anki-robot.target
 fi
 
-#Lower frequency back to "balaned" wire_d preset
+#Lower frequency back to "balanced" wire_d preset
 echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
