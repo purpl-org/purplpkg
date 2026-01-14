@@ -21,9 +21,25 @@ if len(os.Args) < 2 {
     os.Exit(1)
 }
 
+  switch os.Args[2] {
+    case "":
+     fmt.Println("No package given")
+     os.Exit(1)
+  
   switch os.Args[1] {
     case "install":
-     fmt.Println("coming soon idk")
+     if len(os.Args) < 3 {
+         fmt.Println("Usage: purplpkg install <package>")
+         os.Exit(1)
+       }
+     pName := os.Args[2]
+     url := mirrorMain + pName + ".tar.gz"
+     fmt.Println("Installing package:", pName)
+     cmd := exec.Command("curl", "-o", "/data/purplpkg/"+pName+".tar.gz", url)
+     cmd.Run()
+     cmd = exec.Command("ls", "/data/purplpkg")
+     output, _ := cmd.Output()
+     fmt.Println(string(output))
      os.Exit(0)
     case "mirror-list":
      fmt.Println(mirrorMain)
