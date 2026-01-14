@@ -17,6 +17,7 @@ if len(os.Args) < 2 {
     fmt.Println("Usage:")
     fmt.Println("install: Installs a package")
     fmt.Println("package-list: Lists currently available packages")
+    fmt.Println("mirror-list: Lists currently set mirrors")
     os.Exit(1)
 }
 
