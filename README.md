@@ -20,3 +20,5 @@ update-purplOS.tar
 - update.sh
 ```
 update.sh being the file that goes into /sbin.
+## Todo
+- Version checking for packages
