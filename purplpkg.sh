@@ -28,7 +28,11 @@ echo 1267200 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 BASE_URL="https://www.froggitti.net/vector-mirror/"
 
 if [ "$1" == "" ]; then
- echo "Usage: purplpkg <action> <package>"
+ echo purplpkg by purpl
+ echo -------------------
+ echo Usage:
+ echo install: Installs a package
+ echo package-list: Lists currently available packages
  exit 1
 fi
 
