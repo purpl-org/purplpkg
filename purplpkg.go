@@ -1,8 +1,8 @@
-package purplpkg
+package main
 
 import "fmt"
 
-func purplpkg() {
+func main() {
   mirrorMain := "https://www.froggitti.net/vector-mirror/"
   fmt.Println(mirrorMain)
 
