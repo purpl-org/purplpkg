@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#set -e
+set -e
 
 INSTALL_DIR="/data/purplpkg"
 
@@ -17,6 +17,7 @@ fi
 
 if [ "$1" == "update" ]; then
  echo Update implementation not finished yet
+ exit
 fi
 
 if [ "$2" == "" ]; then
@@ -24,34 +25,32 @@ if [ "$2" == "" ]; then
  exit 1
 fi
 
-if [ "$2" == "anki-*" ]; then
+if [[ "$2" == anki-* ]]; then
  echo Package is anki
  echo Stop robot
- rm /data/purplpkg/an*
+ rm -rf /data/purplpkg/an*
  systemctl stop anki-robot.target
 fi
 
 echo Installing package "$2" from "$BASE_URL"
 curl -o /data/purplpkg/"$2".tar.gz "$BASE_URL"/"$2".tar.gz
 
-if [ "$2" == "anki-*" ]; then
+if [[ "$2" == anki-* ]]; then
  echo Package is an anki folder
- echo Curl verison
- curl -o /data/purplpkg/anki.verison "$BASE_URL"/"$2".version
+ echo Curl version
+ curl -o /data/purplpkg/"$2".version "$BASE_URL"/"$2".version
  cat /data/purplpkg/"$2".version
  echo Function unfinished for now
 fi
 
-if [ "$2" == "anki-*" ]; then
+if [[ "$2" == anki-* ]]; then
  mount -o rw,remount / 
- #rm /data/purplpkg/anki*
  echo Package is an anki folder     
  echo Uncompress anki folder
- gunzip /data/purplpkg/anki.tar.gz
- tar -xvf /data/purplpkg/anki.tar
- #mount -o rw,remount /
+ gunzip /data/purplpkg/"$2".tar.gz
+ tar -xvf /data/purplpkg/"$2".tar
  rm -rf /anki
- mv /data/purplpkg/anki /anki
+ mv /data/purplpkg/"$2" /anki
  echo Done
  systemctl start anki-robot.target
 fi
