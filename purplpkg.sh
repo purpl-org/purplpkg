@@ -71,3 +71,6 @@ if [[ "$2" == anki-* ]]; then
  echo Done
  systemctl start anki-robot.target
 fi
+
+#Lower frequency back to "balaned" wire_d preset
+echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
