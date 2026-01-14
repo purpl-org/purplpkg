@@ -1,5 +1,7 @@
 # purplpkg
-Bash package manager for Vector
+Bash/Go package manager for Vector
+
+## Go port currently in development
 
 ## Anki folder handling
 Your .tar for the /anki folder should be formatted as such<br>
