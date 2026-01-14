@@ -55,15 +55,16 @@ if [[ "$2" == anki-* ]]; then
  systemctl stop anki-robot.target
 fi
 
-echo Installing package "$2" from "$BASE_URL"
+echo Downloading package "$2" from "$BASE_URL"
 curl -o /data/purplpkg/"$2".tar.gz "$BASE_URL"/"$2".tar.gz
 
 if [[ ! "$2" == anki-* ]]; then
+ echo "Installing..."
  gunzip /data/purplpkg/"$2".tar.gz
  mkdir "$2"
  mv "$2".tar "$2"/
  cd "$2"
- tar -xvf "$2".tar
+ tar -xf "$2".tar
  mv * /sbin
  cd ..
  echo "Cleaning up..."
