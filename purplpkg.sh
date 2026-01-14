@@ -1,16 +1,24 @@
 #!/usr/bin/env bash
 
+if [ ! -d /data/purplpkg ]; then
+ mkdir -p /data/purplpkg
+fi
+
 set -e
+
+mount -o rw,remount /
+
+rm -rf /data/purplpkg/*
+
+cd /data/purplpkg
+
+echo $PWD
 
 # Raise CPU frequency for faster downloads/installs
 echo 1267200 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 
 # Made this but never ended up using it...
 #INSTALL_DIR="/data/purplpkg"
-
-if [ ! -d /data/purplpkg ]; then
- mkdir -p /data/purplpkg
-fi
 
 BASE_URL="https://www.froggitti.net/vector-mirror/"
 
@@ -24,16 +32,16 @@ fi
 # exit
 #fi
 
-#if [ "$1" == "remove" ]; then
-#  if [ ! -f /sbin/"$2" ]; then
-#   echo "Package \"$2\" doesn't exist."
-#   exit 1
-#  else 
-#   rm /sbin/$2* 2>/dev/null || true  
-#   echo "Package \"$2\" removed."
-#  exit 0
-# fi
-#fi
+if [ "$1" == "remove" ]; then
+  if [ ! -f /sbin/"$2" ]; then
+   echo "Package \"$2\" doesn't exist."
+   exit 1
+  else 
+   rm /sbin/$2* 2>/dev/null || true  
+   echo "Package \"$2\" removed."
+  exit 0
+ fi
+fi
 
 if [ "$2" == "" ]; then
  echo No package given
