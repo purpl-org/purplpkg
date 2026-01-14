@@ -7,6 +7,10 @@ I will use anki-purplOS.tar as an example
 ```
 anki-purplOS.tar
 - anki/
+  - bin
+  - data
+  - etc
+  - lib
 ```
 anki-purplOS.tar is then compressed with gzip to become anki-purplOS.tar.gz<br>
 The package manager expects this exact format, so if your structure differs it will not install correctly.
