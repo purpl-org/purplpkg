@@ -38,8 +38,7 @@ curl -o /data/purplpkg/"$2".tar.gz "$BASE_URL"/"$2".tar.gz
 if [[ "$2" == anki-* ]]; then
  echo Package is an anki folder
  echo Curl version
- curl -o /data/purplpkg/"$2".version "$BASE_URL"/"$2".version
- cat /data/purplpkg/"$2".version
+ curl "$BASE_URL"/"$2".version
  echo Function unfinished for now
 fi
 
