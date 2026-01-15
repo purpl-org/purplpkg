@@ -78,7 +78,7 @@ if [[ ! "$2" == anki-* ]]; then
  #mv * /sbin
  cd ..
  echo "Cleaning up..."
- #rm -rf "$2"
+ rm -rf "$2".tar
  echo "Package "$2" installed"
  exit
 fi
