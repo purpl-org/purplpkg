@@ -4,14 +4,18 @@ if [ ! -d /data/purplpkg ]; then
  mkdir -p /data/purplpkg
 fi
 
+export PATH="/data/purplpkg:$PATH"
+
 set -e
-mount -o rw,remount /
-rm -rf /data/purplpkg/*
+#mount -o rw,remount /
+#rm -rf /data/purplpkg/*
 cd /data/purplpkg
 
 BASE_URL="https://www.froggitti.net/vector-mirror/"
 #https://purplpkg.net-3.froggitti.net/ will be a backup/secondary mirror - still need to set it up
 BASE_URL_2="https://purplpkg.net-3.froggitti.net/"
+
+MIRROR_URL="https://www.froggitti.net/vector-mirror/"
 
 if [ "$1" == "package-list" ]; then
  curl https://www.froggitti.net/vector-mirror/package.list
@@ -61,21 +65,21 @@ fi
 # Raise CPU frequency for faster downloads/installs
 echo 1267200 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 
-echo Downloading package "$2" from "$BASE_URL"
-curl -o /data/purplpkg/"$2".tar.gz "$BASE_URL"/"$2".tar.gz
+echo Downloading package "$2" from "$MIRROR_URL"
+curl -o /data/purplpkg/"$2".tar.gz "$MIRROR_URL"/"$2".tar.gz
 
 if [[ ! "$2" == anki-* ]]; then
  echo "Installing..."
  gunzip /data/purplpkg/"$2".tar.gz
- mkdir "$2"
- mv "$2".tar "$2"/
- cd "$2"
+ #mkdir "$2"
+ #mv "$2".tar "$2"/
+ #cd "$2"
  tar -xf "$2".tar
- mv * /sbin
+ #mv * /sbin
  cd ..
  echo "Cleaning up..."
- rm -rf "$2"
- echo "Package "$2" installed in /sbin"
+ rm -rf "$2".tar
+ echo "Package "$2" installed"
  exit
 fi
 
