@@ -66,6 +66,10 @@ if [ ! "$PWD" == /data/purplpkg ]; then
  exit 1
 fi
 
+if [[ "$2" == anki-* ]]; then
+ rm /data/purplpkg/*.tar
+fi
+
 # Raise CPU frequency for faster downloads/installs
 echo 1267200 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 
@@ -76,15 +80,9 @@ curl -o /data/purplpkg/"$2".tar.gz "$MIRROR_URL"/"$2".tar.gz
 curl -o /data/purplpkg/versions/"$2" "$MIRROR_URL"/"$2".version
 
 if [[ ! "$2" == anki-* ]]; then
- rm /data/purplpkg/*.tar
  echo "Installing..."
  gunzip /data/purplpkg/"$2".tar.gz
- #mkdir "$2"
- #mv "$2".tar "$2"/
- #cd "$2"
  tar -xf "$2".tar
- #mv * /sbin
- cd ..
  echo "Cleaning up..."
  rm -rf "$2".tar
  echo "Package "$2" installed with version "$VERSION""
