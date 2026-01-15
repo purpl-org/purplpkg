@@ -71,7 +71,7 @@ echo 1267200 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 
 export VERSION=$(curl https://www.froggitti.net/vector-mirror/"$2".version)
 
-echo Downloading package "$2" from "$MIRROR_URL" with version 
+echo Downloading package "$2" from "$MIRROR_URL" with version "$VERSION"
 curl -o /data/purplpkg/"$2".tar.gz "$MIRROR_URL"/"$2".tar.gz
 curl -o /data/purplpkg/versions/"$2" "$MIRROR_URL"/"$2".version
 
