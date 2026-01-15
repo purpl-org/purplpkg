@@ -4,6 +4,10 @@ if [ ! -d /data/purplpkg ]; then
  mkdir -p /data/purplpkg
 fi
 
+if [ ! -d /data/purplpkg/versions ]; then
+ mkdir -p /data/purplpkg/versions
+fi
+
 export PATH="/data/purplpkg:$PATH"
 
 set -e
@@ -65,8 +69,11 @@ fi
 # Raise CPU frequency for faster downloads/installs
 echo 1267200 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 
-echo Downloading package "$2" from "$MIRROR_URL"
+export VERSION=$(curl https://www.froggitti.net/vector-mirror/"$2".version)
+
+echo Downloading package "$2" from "$MIRROR_URL" with version 
 curl -o /data/purplpkg/"$2".tar.gz "$MIRROR_URL"/"$2".tar.gz
+curl -o /data/purplpkg/versions/"$2" "$MIRROR_URL"/"$2".version
 
 if [[ ! "$2" == anki-* ]]; then
  echo "Installing..."
@@ -79,7 +86,7 @@ if [[ ! "$2" == anki-* ]]; then
  cd ..
  echo "Cleaning up..."
  rm -rf "$2".tar
- echo "Package "$2" installed"
+ echo "Package "$2" installed with version "$VERSION""
  exit
 fi
 
