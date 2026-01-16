@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
 
-if [ ! -d /data/purplpkg ]; then
- mkdir -p /data/purplpkg
+if [ ! -d "$INSTALL_DIR" ]; then
+ mkdir -p "$INSTALL_DIR"
 fi
 
-if [ ! -d /data/purplpkg/versions ]; then
- mkdir -p /data/purplpkg/versions
+if [ ! -d "$INSTALL_DIR"/versions ]; then
+ mkdir -p "$INSTALL_DIR"/versions
 fi
 
-export PATH="/data/purplpkg:$PATH"
+export PATH=""$INSTALL_DIR":$PATH"
 
 set -e
 #mount -o rw,remount /
-#rm -rf /data/purplpkg/*
-cd /data/purplpkg
+#rm -rf "$INSTALL_DIR"/*
+cd "$INSTALL_DIR"
 
 BASE_URL="https://www.froggitti.net/vector-mirror/"
 #https://purplpkg.net-3.froggitti.net/ will be a backup/secondary mirror - still need to set it up
@@ -26,8 +26,7 @@ if [ "$1" == "package-list" ]; then
  exit 0
 fi
 
-# Made this but never ended up using it...
-#INSTALL_DIR="/data/purplpkg"
+INSTALL_DIR="/data/purplpkg"
 
 if [ "$1" == "" ]; then
  echo purplpkg by purpl
@@ -61,13 +60,13 @@ fi
 
 echo $PWD
 
-if [ ! "$PWD" == /data/purplpkg ]; then
+if [ ! "$PWD" == "$INSTALL_DIR" ]; then
  echo "We are in the wrong directory. Exiting..."
  exit 1
 fi
 
 if [[ "$2" == anki-* ]]; then
- rm /data/purplpkg/*.tar
+ rm "$INSTALL_DIR"/*.tar
 fi
 
 # Raise CPU frequency for faster downloads/installs
@@ -76,12 +75,12 @@ echo 1267200 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 export VERSION=$(curl https://www.froggitti.net/vector-mirror/"$2".version)
 
 echo Downloading package "$2" from "$MIRROR_URL" with version "$VERSION"
-curl -o /data/purplpkg/"$2".tar.gz "$MIRROR_URL"/"$2".tar.gz
-curl -o /data/purplpkg/versions/"$2" "$MIRROR_URL"/"$2".version
+curl -o "$INSTALL_DIR"/"$2".tar.gz "$MIRROR_URL"/"$2".tar.gz
+curl -o "$INSTALL_DIR"/versions/"$2" "$MIRROR_URL"/"$2".version
 
 if [[ ! "$2" == anki-* ]]; then
  echo "Installing..."
- gunzip /data/purplpkg/"$2".tar.gz
+ gunzip "$INSTALL_DIR"/"$2".tar.gz
  tar -xf "$2".tar
  echo "Cleaning up..."
  rm -rf "$2".tar
@@ -94,11 +93,11 @@ if [[ "$2" == anki-* ]]; then
  echo "Stop robot"
  systemctl stop anki-robot.target
  echo "Decompress anki folder"
- gunzip /data/purplpkg/"$2".tar.gz
- tar -xf /data/purplpkg/"$2".tar
+ gunzip "$INSTALL_DIR"/"$2".tar.gz
+ tar -xf "$INSTALL_DIR"/"$2".tar
  rm -rf /anki
  echo "Install /anki folder"
- mv /data/purplpkg/anki /anki
+ mv "$INSTALL_DIR"/anki /anki
  echo "Done"
  systemctl start anki-robot.target
 fi
