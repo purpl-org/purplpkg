@@ -57,7 +57,7 @@ if [ "$1" == "update" ]; then
      exit 1
    else
      echo Installed verison of package "$2" is $(cat versions/"$2")
-    if [ $(curl "$MIRROR_URL"/"$2".version) == $(cat versions/"$2") ]; then
+    if [ $(curl --silent "$MIRROR_URL"/"$2".version) == $(cat versions/"$2") ]; then
      echo Package "$2" already up to date.
      exit 0
     else
