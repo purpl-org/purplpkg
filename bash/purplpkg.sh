@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 BASE_URL="https://www.froggitti.net/vector-mirror/"
-BASE_URL_2="https://purplpkg.net-3.froggitti.net/"
+BASE_URL_2=""
 
 MIRROR_URL="https://www.froggitti.net/vector-mirror/"
 
@@ -40,8 +40,13 @@ if [ "$1" == "package-list" ]; then
 fi
 
 if [ "$1" == "mirror-list" ]; then
-    echo "$BASE_URL"
-    echo "$BASE_URL_2"
+  if [ "$BASE_URL_2" == "" ]; then
+    echo Primary mirror: "$BASE_URL"
+    echo Secondary mirror undefined.
+    exit 0
+  else
+    echo Primary mirror: "$BASE_URL"
+    echo Secondary mirror: "$BASE_URL_2"
     exit 0
 fi
 
@@ -89,20 +94,6 @@ if grep -q "<head><title>404 Not Found</title></head>" "$2".tar.gz; then
     rm "$2".tar.gz
     echo "Check the package name and try again."
     exit 1
-fi
-
-if [[ "$2" == anki-* ]]; then
-    echo "Package is an anki folder"
-    echo "Stop robot"
-    systemctl stop anki-robot.target
-    echo "Decompress anki folder"
-    gunzip /data/purplpkg/"$2".tar.gz
-    tar -xf /data/purplpkg/"$2".tar
-    rm -rf /anki
-    echo "Install /anki folder"
-    mv /data/purplpkg/anki /anki
-    echo "Done"
-    systemctl start anki-robot.target
 else
     echo "Installing..."
     gunzip /data/purplpkg/"$2".tar.gz
@@ -110,7 +101,7 @@ else
     echo "Cleaning up..."
     rm -rf "$2".tar
     echo "Package "$2" installed with version "$VERSION""
-    exit
+    exit 0
 fi
 
 #Lower frequency back to "balanced" wire_d preset
