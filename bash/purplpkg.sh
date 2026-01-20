@@ -50,10 +50,28 @@ if [ "$1" == "mirror-list" ]; then
     exit 0
 fi
 
-#if [ "$1" == "update" ]; then
-# echo Update implementation not finished yet
-# exit 1
-#fi
+if [ "$1" == "update" ]; then
+   if [ ! -f versions/"$2" ]; then
+     echo No such package "$2"
+     exit 1
+   else
+     echo Installed verison of package "$2" is $(cat versions/"$2")
+    if [ $(curl "$MIRROR_URL"/"$2".version) == $(cat versions/"$2") ]; then
+     echo Package "$2" already up to date.
+     exit 0
+    else
+     rm -rf "$2"*
+     echo Downloading updated package "$2" from "$MIRROR_URL" with version "$VERSION"
+     curl -o /data/purplpkg/"$2".tar.gz "$MIRROR_URL"/"$2".tar.gz
+     curl --silent -o /data/purplpkg/versions/"$2" "$MIRROR_URL"/"$2".version
+     echo "Updating..."
+     gunzip /data/purplpkg/"$2".tar.gz
+     tar -xf "$2".tar
+     echo "Cleaning up..."
+     rm -rf "$2".tar
+     echo "Package "$2" updated with version "$VERSION""
+     exit 0
+fi
 
 #if [ "$1" == "remove" ]; then
 #  if [ ! -f /sbin/"$2" ]; then
@@ -92,6 +110,7 @@ curl --silent -o /data/purplpkg/versions/"$2" "$MIRROR_URL"/"$2".version
 if grep -q "<head><title>404 Not Found</title></head>" "$2".tar.gz; then
     echo "Package is a 404. Deleting."
     rm "$2".tar.gz
+    rm versions/"$2"
     echo "Check the package name and try again."
     exit 1
 else
