@@ -61,6 +61,7 @@ if [ "$1" == "update" ]; then
      echo Package "$2" already up to date.
      exit 0
     else
+     export VERSION=$(curl --silent "$MIRROR_URL"/"$2".version)
      rm -rf "$2"*
      echo Downloading updated package "$2" from "$MIRROR_URL" with version "$VERSION"
      curl -o /data/purplpkg/"$2".tar.gz "$MIRROR_URL"/"$2".tar.gz
