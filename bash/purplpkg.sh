@@ -29,7 +29,7 @@ if [ "$1" == "" ]; then
     exit 0
 fi
 
-if [ "$1" != "package-list" ] && [ "$1" != "install" ] && [ "$1" != "mirror-list" ]; then
+if [ "$1" != "package-list" ] && [ "$1" != "install" ] && [ "$1" != "mirror-list" ] && [ "$1" != "update" ]; then
     echo Unknown action "$1"
     exit 1
 fi
