@@ -48,6 +48,7 @@ if [ "$1" == "mirror-list" ]; then
     echo Primary mirror: "$BASE_URL"
     echo Secondary mirror: "$BASE_URL_2"
     exit 0
+ fi
 fi
 
 if [ "$1" == "update" ]; then
@@ -71,6 +72,8 @@ if [ "$1" == "update" ]; then
      rm -rf "$2".tar
      echo "Package "$2" updated with version "$VERSION""
      exit 0
+  fi
+ fi
 fi
 
 #if [ "$1" == "remove" ]; then
