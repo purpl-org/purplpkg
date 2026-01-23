@@ -56,5 +56,8 @@ func main() {
 		output, _ := cmd.Output()
 		fmt.Println(string(output))
 		os.Exit(0)
+	case "update":
+		fmt.Println("later")
+		os.Exit(0)
 	}
 }
