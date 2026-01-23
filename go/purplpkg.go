@@ -35,9 +35,7 @@ func main() {
 		fmt.Println("Installing package:", pName)
 		cmd := exec.Command("curl", "-o", "/data/purplpkg/"+pName+".tar.gz", url)
 		cmd.Run()
-		cmd = exec.Command("ls", "/data/purplpkg")
-		output, _ := cmd.Output()
-		fmt.Println(string(output))
+		cmd := exec.Command("tar", "-xzvf", "/data/purplpkg/"+pName+".tar.gz)
 		os.Exit(0)
 	case "mirror-list":
 		fmt.Println(mirrorMain)
