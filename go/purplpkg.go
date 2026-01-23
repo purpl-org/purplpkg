@@ -4,17 +4,11 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	//"archive/tar"
 )
-
-//import "strings"
 
 func main() {
 	os.Chdir("/data/purplpkg")
 	mirrorMain := "https://www.froggitti.net/vector-mirror/"
-	//mirrorSecondary := "https://net-3.froggitti.net/vector-mirror/"
-	//  fmt.Println(mirrorMain)
-	//  fmt.Println(mirrorSecondary)
 
 	if len(os.Args) < 2 {
 		fmt.Println("purplpkg by purpl")
@@ -56,7 +50,6 @@ func main() {
 		fmt.Println("Active Mirrors:")
 		fmt.Println("-------------------")
 		fmt.Println(mirrorMain)
-		//fmt.Println(mirrorSecondary)
 		os.Exit(0)
 	case "package-list":
 		cmd := exec.Command("curl", "https://www.froggitti.net/vector-mirror/package.list")
