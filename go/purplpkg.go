@@ -44,7 +44,7 @@ func main() {
 		fmt.Println("Package downloaded")
 		unzip := exec.Command("gunzip", "/data/purplpkg/"+pName+".tar.gz")
 		unzip.Run()
-		fmt.Println("Packge decompressed")
+		fmt.Println("Package decompressed")
 		install := exec.Command("tar", "-xvf", "/data/purplpkg/"+pName+".tar", "-C", "/data/purplpkg")
 		install.Run()
 		fmt.Println("Package installed")
