@@ -33,10 +33,10 @@ func main() {
 		pName := os.Args[2]
 		url := mirrorMain + pName + ".tar.gz"
 		fmt.Println("Installing package:", pName)
-		cmd := exec.Command("curl", "-o", "/data/purplpkg/"+pName+".tar.gz", url)
-		cmd.Run()
-		cmd := exec.Command("tar", "-xzvf", "/data/purplpkg/"+pName+".tar.gz")
-		cmd.Run()
+		download := exec.Command("curl", "-o", "/data/purplpkg/"+pName+".tar.gz", url)
+		download.Run()
+		install := exec.Command("tar", "-xzvf", "/data/purplpkg/"+pName+".tar.gz")
+		install.Run()
 		os.Exit(0)
 	case "mirror-list":
 		fmt.Println(mirrorMain)
