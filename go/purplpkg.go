@@ -36,6 +36,7 @@ func main() {
 		cmd := exec.Command("curl", "-o", "/data/purplpkg/"+pName+".tar.gz", url)
 		cmd.Run()
 		cmd := exec.Command("tar", "-xzvf", "/data/purplpkg/"+pName+".tar.gz)
+		cmd.Run()
 		os.Exit(0)
 	case "mirror-list":
 		fmt.Println(mirrorMain)
