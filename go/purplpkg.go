@@ -57,7 +57,17 @@ func main() {
 		fmt.Println(string(output))
 		os.Exit(0)
 	case "update":
-		fmt.Println("later")
+		if len(os.Args) < 3 {
+			fmt.Println("Usage: purplpkg update <package>")
+			os.Exit(1)
+		}
+		pName := os.Args[2]
+		curllatestget := exec.Command("curl", mirrorMain+pName+".version")
+		curllatestoutput, _ := curllatestget.Output()
+		curllatest := string(curllatestoutput)
+
 		os.Exit(0)
 	}
+	fmt.Println("unknown action")
+	os.Exit(1)
 }
