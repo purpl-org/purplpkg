@@ -12,7 +12,7 @@ import (
 func main() {
 	os.Chdir("/data/purplpkg")
 	mirrorMain := "https://www.froggitti.net/vector-mirror/"
-	mirrorSecondary := "https://net-3.froggitti.net/vector-mirror/"
+	//mirrorSecondary := "https://net-3.froggitti.net/vector-mirror/"
 	//  fmt.Println(mirrorMain)
 	//  fmt.Println(mirrorSecondary)
 
@@ -38,18 +38,25 @@ func main() {
 		fmt.Println("Installing package", pName)
 		versioning := exec.Command("curl", "-o", "/data/purplpkg/versions/"+pName+"", version)
 		versioning.Run()
+		fmt.Println("Version downloaded successfully")
 		download := exec.Command("curl", "-o", "/data/purplpkg/"+pName+".tar.gz", url)
 		download.Run()
+		fmt.Println("Package downloaded")
 		unzip := exec.Command("gunzip", "/data/purplpkg/"+pName+".tar.gz")
 		unzip.Run()
+		fmt.Println("Packge decompressed")
 		install := exec.Command("tar", "-xvf", "/data/purplpkg/"+pName+".tar", "-C", "/data/purplpkg")
 		install.Run()
+		fmt.Println("Package installed")
 		clean := exec.Command("rm", ""+pName+".tar.gz", ""+pName+".tar")
 		clean.Run()
+		fmt.Println("Done.")
 		os.Exit(0)
 	case "mirror-list":
+		fmt.Println("Active Mirrors:")
+		fmt.Println("-------------------")
 		fmt.Println(mirrorMain)
-		fmt.Println(mirrorSecondary)
+		//fmt.Println(mirrorSecondary)
 		os.Exit(0)
 	case "package-list":
 		cmd := exec.Command("curl", "https://www.froggitti.net/vector-mirror/package.list")
