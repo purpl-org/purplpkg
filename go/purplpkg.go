@@ -37,7 +37,7 @@ func main() {
 		download.Run()
 		unzip := exec.Command("gunzip", "/data/purplpkg/"+pName".tar.gz")
 		unzip.Run()
-		install := exec.Command("tar", "-xvf", "/data/purplpkg/"+pName+".tar")
+		install := exec.Command("tar", "-xvf", "/data/purplpkg/"+pName+".tar", "-c", "/data/purplpkg")
 		install.Run()
 		os.Exit(0)
 	case "mirror-list":
