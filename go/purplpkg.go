@@ -35,6 +35,8 @@ func main() {
 		fmt.Println("Installing package:", pName)
 		download := exec.Command("curl", "-o", "/data/purplpkg/"+pName+".tar.gz", url)
 		download.Run()
+		direct := exec.Command("cd", "/data/purplpkg")
+		direct.Run()
 		install := exec.Command("tar", "-xzvf", "/data/purplpkg/"+pName+".tar.gz")
 		install.Run()
 		os.Exit(0)
