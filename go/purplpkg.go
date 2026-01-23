@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"archive/tar"
 )
 
 //import "strings"
 
 func main() {
+	os.Chdir("/data/purplpkg")
 	mirrorMain := "https://www.froggitti.net/vector-mirror/"
 	mirrorSecondary := "https://net-3.froggitti.net/vector-mirror/"
 	//  fmt.Println(mirrorMain)
@@ -37,7 +39,7 @@ func main() {
 		download.Run()
 		unzip := exec.Command("gunzip", "/data/purplpkg/"+pName+".tar.gz")
 		unzip.Run()
-		install := exec.Command("tar", "-xvf", "/data/purplpkg/"+pName+".tar", "-c", "/data/purplpkg")
+		install := exec.Command("tar", "-xvf", "/data/purplpkg/"+pName+".tar", "-C", "/data/purplpkg")
 		install.Run()
 		os.Exit(0)
 	case "mirror-list":
