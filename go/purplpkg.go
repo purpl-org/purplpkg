@@ -33,9 +33,10 @@ func main() {
 			os.Exit(1)
 		}
 		pName := os.Args[2]
-		pVersion := exec.Command("curl", ""+mirrorMain+"/"+pName+".version")
 		url := mirrorMain + pName + ".tar.gz"
-		fmt.Println("Installing package", pName, "with version", pVersion)
+		version := mirrorMain + pName ".version"
+		fmt.Println("Installing package", pName)
+		versioning := exec.Command("curl", "-o", "/data/purplpkg/versions/"+pName"", version)
 		download := exec.Command("curl", "-o", "/data/purplpkg/"+pName+".tar.gz", url)
 		download.Run()
 		unzip := exec.Command("gunzip", "/data/purplpkg/"+pName+".tar.gz")
