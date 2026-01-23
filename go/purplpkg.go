@@ -50,9 +50,3 @@ func main() {
 		os.Exit(0)
 	}
 }
-
-	switch os.Args[2] {
-	case "":
-		fmt.Println("No package given")
-		os.Exit(1)
-	}
