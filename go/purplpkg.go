@@ -61,11 +61,45 @@ func main() {
 			fmt.Println("Usage: purplpkg update <package>")
 			os.Exit(1)
 		}
+
 		pName := os.Args[2]
+
 		curllatestget := exec.Command("curl", mirrorMain+pName+".version")
 		curllatestoutput, _ := curllatestget.Output()
 		curllatest := string(curllatestoutput)
+		//fmt.Println(curllatest)
 
+		curlinstalledget := exec.Command("cat", "/data/purplpkg/versions/"+pName)
+		curlinstalledoutput, _ := curlinstalledget.Output()
+		curlinstalled := string(curlinstalledoutput)
+		//fmt.Println(curlinstalled)
+
+		if curllatest > curlinstalled {
+			pName := os.Args[2]
+			url := mirrorMain + pName + ".tar.gz"
+			version := mirrorMain + pName + ".version"
+			fmt.Println("Installed version of " + pName + " is older than available package online. Upgrading...")
+			fmt.Println("Installing package", pName)
+			versioning := exec.Command("curl", "-o", "/data/purplpkg/versions/"+pName+"", version)
+			versioning.Run()
+			fmt.Println("Version downloaded successfully")
+			download := exec.Command("curl", "-o", "/data/purplpkg/"+pName+".tar.gz", url)
+			download.Run()
+			fmt.Println("Package downloaded")
+			unzip := exec.Command("gunzip", "/data/purplpkg/"+pName+".tar.gz")
+			unzip.Run()
+			fmt.Println("Package decompressed")
+			install := exec.Command("tar", "-xvf", "/data/purplpkg/"+pName+".tar", "-C", "/data/purplpkg")
+			install.Run()
+			fmt.Println("Package installed")
+			clean := exec.Command("rm", ""+pName+".tar.gz", ""+pName+".tar")
+			clean.Run()
+			fmt.Println("Done.")
+			os.Exit(0)
+		} else if curlinstalled == curllatest {
+			fmt.Println("Installed version of " + pName + " is up-to-date.")
+			os.Exit(0)
+		}
 		os.Exit(0)
 	}
 	fmt.Println("unknown action")
