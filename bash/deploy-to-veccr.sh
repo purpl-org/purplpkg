@@ -5,6 +5,7 @@ if [ "$1" == "" ]; then
  echo "GIVE THE FUCKING SCRIPT A FUCKING IP"
  exit 1
 else
- scp -i ../go/ssh_root_key purplpkg.sh root@"$1":/data/purplpkg.sh
+ ssh -i ../go/ssh_root_key root@"$1" 'mount -o rw,remount /'
+ scp -i ../go/ssh_root_key purplpkg.sh root@"$1":/sbin/purplpkg
 fi
 
