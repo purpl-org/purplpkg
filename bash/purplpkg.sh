@@ -94,10 +94,9 @@ if [ "$1" == "update" ]; then
      curl --silent -o /data/purplpkg/versions/"$2" "$MIRROR_URL"/"$2".version
      curl --silent -o /data/purplpkg/files/"$2" "$MIRROR_URL"/"$2".flist
      echo "Updating..."
-     gunzip /data/purplpkg/"$2".tar.gz
-     tar -xf "$2".tar
+     tar -xzf "$2".tar.gz
      echo "Cleaning up..."
-     rm -rf "$2".tar
+     rm "$2".tar.gz
      echo "Package "$2" updated with version "$VERSION""
      #Lower frequency back to "balanced" wire_d preset
      echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
@@ -116,10 +115,6 @@ if [ ! "$PWD" == /data/purplpkg ]; then
     exit 1
 fi
 
-if [[ "$2" == anki-* ]]; then
-    rm /data/purplpkg/*.tar
-fi
-
 export VERSION=$(curl --silent "$MIRROR_URL"/"$2".version)
 
 echo Downloading package "$2" from "$MIRROR_URL" with version "$VERSION"
@@ -135,10 +130,9 @@ if grep -q "<head><title>404 Not Found</title></head>" "$2".tar.gz; then
     exit 1
 else
     echo "Installing..."
-    gunzip /data/purplpkg/"$2".tar.gz
-    tar -xf "$2".tar
+    tar -xzf "$2".tar.gz
     echo "Cleaning up..."
-    rm -rf "$2".tar
+    rm "$2".tar.gz
     echo "Package "$2" installed with version "$VERSION""
     #Lower frequency back to "balanced" wire_d preset
     echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
