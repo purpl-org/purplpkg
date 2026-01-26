@@ -70,6 +70,7 @@ if [ "$1" == "update" ]; then
      echo Downloading updated package "$2" from "$MIRROR_URL" with version "$VERSION"
      curl -o /data/purplpkg/"$2".tar.gz "$MIRROR_URL"/"$2".tar.gz
      curl --silent -o /data/purplpkg/versions/"$2" "$MIRROR_URL"/"$2".version
+     curl --silent -o /data/purplpkg/files/"$2" "$MIRROR_URL"/"$2".flist
      echo "Updating..."
      gunzip /data/purplpkg/"$2".tar.gz
      tar -xf "$2".tar
