@@ -90,13 +90,13 @@ if [ "$1" == "update" ]; then
      export VERSION=$(curl --silent "$MIRROR_URL"/"$2".version)
      rm $(cat /data/purplpkg/files/"$2")
      echo Downloading updated package "$2" from "$MIRROR_URL" with version "$VERSION"
-     curl -o /data/purplpkg/"$2".tar.gz "$MIRROR_URL"/"$2".tar.gz
+     curl -o /data/purplpkg/"$2".ppkg "$MIRROR_URL"/"$2".ppkg
      curl --silent -o /data/purplpkg/versions/"$2" "$MIRROR_URL"/"$2".version
      curl --silent -o /data/purplpkg/files/"$2" "$MIRROR_URL"/"$2".flist
      echo "Updating..."
-     tar -xzf "$2".tar.gz
+     tar -xzf "$2".ppkg
      echo "Cleaning up..."
-     rm "$2".tar.gz
+     rm "$2".ppkg
      echo "Package "$2" updated with version "$VERSION""
      #Lower frequency back to "balanced" wire_d preset
      echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
@@ -118,21 +118,21 @@ fi
 export VERSION=$(curl --silent "$MIRROR_URL"/"$2".version)
 
 echo Downloading package "$2" from "$MIRROR_URL" with version "$VERSION"
-curl -o /data/purplpkg/"$2".tar.gz "$MIRROR_URL"/"$2".tar.gz
+curl -o /data/purplpkg/"$2".ppkg "$MIRROR_URL"/"$2".ppkg
 curl --silent -o /data/purplpkg/versions/"$2" "$MIRROR_URL"/"$2".version
 curl --silent -o /data/purplpkg/files/"$2" "$MIRROR_URL"/"$2".flist
 
-if grep -q "<head><title>404 Not Found</title></head>" "$2".tar.gz; then
+if grep -q "<head><title>404 Not Found</title></head>" "$2".ppkg; then
     echo "Package is a 404. Deleting."
-    rm "$2".tar.gz
+    rm "$2".ppkg
     rm versions/"$2"
     echo "Check the package name and try again."
     exit 1
 else
     echo "Installing..."
-    tar -xzf "$2".tar.gz
+    tar -xzf "$2".ppkg
     echo "Cleaning up..."
-    rm "$2".tar.gz
+    rm "$2".ppkg
     echo "Package "$2" installed with version "$VERSION""
     #Lower frequency back to "balanced" wire_d preset
     echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
