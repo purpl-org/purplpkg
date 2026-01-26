@@ -13,6 +13,10 @@ if [ ! -d /data/purplpkg/versions ]; then
  mkdir -p /data/purplpkg/versions
 fi
 
+if [ ! -d /data/purplpkg/files ]; then
+ mkdir -p /data/purplpkg/files
+fi
+
 #export PATH="$INSTALL_DIR:$PATH"
 
 set -e
@@ -77,16 +81,10 @@ if [ "$1" == "update" ]; then
  fi
 fi
 
-#if [ "$1" == "remove" ]; then
-#  if [ ! -f /sbin/"$2" ]; then
-#   echo "Package \"$2\" doesn't exist."
-#   exit 1
-#  else 
-#   rm /sbin/$2* 2>/dev/null || true  
-#   echo "Package \"$2\" removed."
-#  exit 0
-# fi
-#fi
+if [ "$1" == "remove" ]; then
+
+
+fi
 
 if [ "$2" == "" ]; then
     echo No package given
@@ -110,6 +108,7 @@ export VERSION=$(curl --silent "$MIRROR_URL"/"$2".version)
 echo Downloading package "$2" from "$MIRROR_URL" with version "$VERSION"
 curl -o /data/purplpkg/"$2".tar.gz "$MIRROR_URL"/"$2".tar.gz
 curl --silent -o /data/purplpkg/versions/"$2" "$MIRROR_URL"/"$2".version
+curl --silent -o /data/purplpkg/files/"$2" "$MIRROR_URL"/"$2".flist
 
 if grep -q "<head><title>404 Not Found</title></head>" "$2".tar.gz; then
     echo "Package is a 404. Deleting."
