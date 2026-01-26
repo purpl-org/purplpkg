@@ -82,10 +82,8 @@ if [ "$1" == "update" ]; then
  fi
 fi
 
-if [ "$1" == "remove" ]; then
-
-
-fi
+#if [ "$1" == "remove" ]; then
+#fi
 
 if [ "$2" == "" ]; then
     echo No package given
