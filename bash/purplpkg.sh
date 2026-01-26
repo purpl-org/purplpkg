@@ -34,6 +34,8 @@ if [ "$1" == "" ]; then
     echo -------------------
     echo Usage:
     echo install: Installs a package
+    echo update: Updates an installed package
+    echo remove: Removes an installed package
     echo package-list: Lists currently available packages
     echo mirror-list: Lists currently available mirrors
     exit 0
