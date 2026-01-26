@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+#purplpkg - a simple package manager for the Vector robot
+#by purpl organization.
+
+# Raise CPU frequency for faster downloads/installs
+echo 1267200 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+
 BASE_URL="https://www.froggitti.net/vector-mirror/"
 BASE_URL_2=""
 
@@ -33,7 +39,7 @@ if [ "$1" == "" ]; then
     exit 0
 fi
 
-if [ "$1" != "package-list" ] && [ "$1" != "install" ] && [ "$1" != "mirror-list" ] && [ "$1" != "update" ]; then
+if [ "$1" != "package-list" ] && [ "$1" != "install" ] && [ "$1" != "mirror-list" ] && [ "$1" != "update" ] && [ "$1" != "remove" ]; then
     echo Unknown action "$1"
     exit 1
 fi
@@ -55,12 +61,26 @@ if [ "$1" == "mirror-list" ]; then
  fi
 fi
 
+if [ "$1" == "remove" ]; then
+ if [ "$2" == "" ]; then
+  echo "Package not specified"
+  exit 1
+ elif [ ! -f /data/purplpkg/files/"$2" ]; then
+  echo "Package "$2" isn't installed."
+  exit 1
+ fi
+ rm $(cat /data/purplpkg/files/"$2") 
+ echo "Removing package "$2""
+ echo "Package "$2" removed." 
+ exit 0
+fi
+
 if [ "$1" == "update" ]; then
    if [ ! -f versions/"$2" ]; then
      echo No such package "$2"
      exit 1
    else
-     echo Installed verison of package "$2" is $(cat versions/"$2")
+     echo Installed version of package "$2" is $(cat versions/"$2")
     if [ $(curl --silent "$MIRROR_URL"/"$2".version) == $(cat versions/"$2") ]; then
      echo Package "$2" already up to date.
      exit 0
@@ -77,13 +97,12 @@ if [ "$1" == "update" ]; then
      echo "Cleaning up..."
      rm -rf "$2".tar
      echo "Package "$2" updated with version "$VERSION""
+     #Lower frequency back to "balanced" wire_d preset
+     echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
      exit 0
   fi
  fi
 fi
-
-#if [ "$1" == "remove" ]; then
-#fi
 
 if [ "$2" == "" ]; then
     echo No package given
@@ -98,9 +117,6 @@ fi
 if [[ "$2" == anki-* ]]; then
     rm /data/purplpkg/*.tar
 fi
-
-# Raise CPU frequency for faster downloads/installs
-echo 1267200 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 
 export VERSION=$(curl --silent "$MIRROR_URL"/"$2".version)
 
@@ -122,8 +138,8 @@ else
     echo "Cleaning up..."
     rm -rf "$2".tar
     echo "Package "$2" installed with version "$VERSION""
+    #Lower frequency back to "balanced" wire_d preset
+    echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
     exit 0
 fi
 
-#Lower frequency back to "balanced" wire_d preset
-echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
