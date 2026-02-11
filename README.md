@@ -15,8 +15,7 @@ update.ppkg
 ```
 update being the file that goes into /data/purplpkg.
 ## Todo
-- Version checking for packages (done in the Bash version just need to do for the Go version)
-- Remove function
+Make the Go version functionally identical to the Bash version
 ## Goals
-- Start a public FTP server for all to upload packages
+- Get into WireOS (obtained)
 - Make it good idk
