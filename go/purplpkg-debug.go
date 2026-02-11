@@ -28,22 +28,22 @@ func main() {
 			os.Exit(1)
 		}
 		pName := os.Args[2]
-		url := mirrorMain + pName + ".tar.gz"
+		url := mirrorMain + pName + ".ppkg"
 		version := mirrorMain + pName + ".version"
 		fmt.Println("Installing package", pName)
 		versioning := exec.Command("curl", "-o", "purplpkg/versions/"+pName+"", version)
 		versioning.Run()
 		fmt.Println("Version downloaded successfully")
-		download := exec.Command("curl", "-o", "purplpkg/"+pName+".tar.gz", url)
+		download := exec.Command("curl", "-o", "purplpkg/"+pName+".ppkg", url)
 		download.Run()
 		fmt.Println("Package downloaded")
-		unzip := exec.Command("gunzip", "purplpkg/"+pName+".tar.gz")
+		unzip := exec.Command("gunzip", "purplpkg/"+pName+".ppkg")
 		unzip.Run()
 		fmt.Println("Package decompressed")
 		install := exec.Command("tar", "-xvf", "purplpkg/"+pName+".tar", "-C", "purplpkg")
 		install.Run()
 		fmt.Println("Package installed")
-		clean := exec.Command("rm", ""+pName+".tar.gz", ""+pName+".tar")
+		clean := exec.Command("rm", ""+pName+".ppkg", ""+pName+".tar")
 		clean.Run()
 		fmt.Println("Done.")
 		os.Exit(0)
@@ -77,23 +77,23 @@ func main() {
 
 		if curllatest > curlinstalled {
 			pName := os.Args[2]
-			url := mirrorMain + pName + ".tar.gz"
+			url := mirrorMain + pName + ".ppkg"
 			version := mirrorMain + pName + ".version"
 			fmt.Println("Installed version of " + pName + " is older than available package online. Upgrading...")
 			fmt.Println("Installing package", pName)
 			versioning := exec.Command("curl", "-o", "purplpkg/versions/"+pName+"", version)
 			versioning.Run()
 			fmt.Println("Version downloaded successfully")
-			download := exec.Command("curl", "-o", "purplpkg/"+pName+".tar.gz", url)
+			download := exec.Command("curl", "-o", "purplpkg/"+pName+".ppkg", url)
 			download.Run()
 			fmt.Println("Package downloaded")
-			unzip := exec.Command("gunzip", "purplpkg/"+pName+".tar.gz")
+			unzip := exec.Command("gunzip", "purplpkg/"+pName+".ppkg")
 			unzip.Run()
 			fmt.Println("Package decompressed")
 			install := exec.Command("tar", "-xvf", "purplpkg/"+pName+".tar", "-C", "purplpkg")
 			install.Run()
 			fmt.Println("Package installed")
-			clean := exec.Command("rm", ""+pName+".tar.gz", ""+pName+".tar")
+			clean := exec.Command("rm", ""+pName+".ppkg", ""+pName+".tar")
 			clean.Run()
 			fmt.Println("Done.")
 			os.Exit(0)
