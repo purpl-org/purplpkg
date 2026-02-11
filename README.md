@@ -15,7 +15,7 @@ update.ppkg
 ```
 update being the file that goes into /data/purplpkg.
 ## Todo
-Make the Go version functionally identical to the Bash version
+- Make the Go version functionally identical to the Bash version
 ## Goals
-- Get into WireOS (obtained)
+- Merge into WireOS (obtained)
 - Make it good idk
