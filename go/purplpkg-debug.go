@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	os.Chdir("purplpkg")
+	os.Chdir("/Users/frog/Vector/purplpkg/go/purplpkg")
 	mirrorMain := "https://www.froggitti.net/vector-mirror/"
 
 	if len(os.Args) < 2 {
@@ -31,16 +31,16 @@ func main() {
 		url := mirrorMain + pName + ".ppkg"
 		version := mirrorMain + pName + ".version"
 		fmt.Println("Installing package", pName)
-		versioning := exec.Command("curl", "-o", "purplpkg/versions/"+pName+"", version)
+		versioning := exec.Command("curl", "-o", "/Users/frog/Vector/purplpkg/go/purplpkg/versions/"+pName+"", version)
 		versioning.Run()
 		fmt.Println("Version downloaded successfully")
-		download := exec.Command("curl", "-o", "purplpkg/"+pName+".ppkg", url)
+		download := exec.Command("curl", "-o", "/Users/frog/Vector/purplpkg/go/purplpkg/"+pName+".ppkg", url)
 		download.Run()
 		fmt.Println("Package downloaded")
-		unzip := exec.Command("gunzip", "purplpkg/"+pName+".ppkg")
+		unzip := exec.Command("gunzip", "/Users/frog/Vector/purplpkg/go/purplpkg/"+pName+".ppkg")
 		unzip.Run()
 		fmt.Println("Package decompressed")
-		install := exec.Command("tar", "-xvf", "purplpkg/"+pName+".tar", "-C", "purplpkg")
+		install := exec.Command("tar", "-xvf", "/Users/frog/Vector/purplpkg/go/purplpkg/"+pName+".tar", "-C", "/Users/frog/Vector/purplpkg/go/purplpkg")
 		install.Run()
 		fmt.Println("Package installed")
 		clean := exec.Command("rm", ""+pName+".ppkg", ""+pName+".tar")
@@ -70,7 +70,7 @@ func main() {
 		curllatest := string(curllatestoutput)
 		//fmt.Println(curllatest)
 
-		curlinstalledget := exec.Command("cat", "purplpkg/versions/"+pName)
+		curlinstalledget := exec.Command("cat", "/Users/frog/Vector/purplpkg/go/purplpkg/versions/"+pName)
 		curlinstalledoutput, _ := curlinstalledget.Output()
 		curlinstalled := string(curlinstalledoutput)
 		//fmt.Println(curlinstalled)
@@ -81,16 +81,16 @@ func main() {
 			version := mirrorMain + pName + ".version"
 			fmt.Println("Installed version of " + pName + " is older than available package online. Upgrading...")
 			fmt.Println("Installing package", pName)
-			versioning := exec.Command("curl", "-o", "purplpkg/versions/"+pName+"", version)
+			versioning := exec.Command("curl", "-o", "/Users/frog/Vector/purplpkg/go/purplpkg/versions/"+pName+"", version)
 			versioning.Run()
 			fmt.Println("Version downloaded successfully")
-			download := exec.Command("curl", "-o", "purplpkg/"+pName+".ppkg", url)
+			download := exec.Command("curl", "-o", "/Users/frog/Vector/purplpkg/go/purplpkg/"+pName+".ppkg", url)
 			download.Run()
 			fmt.Println("Package downloaded")
-			unzip := exec.Command("gunzip", "purplpkg/"+pName+".ppkg")
+			unzip := exec.Command("gunzip", "/Users/frog/Vector/purplpkg/go/purplpkg/"+pName+".ppkg")
 			unzip.Run()
 			fmt.Println("Package decompressed")
-			install := exec.Command("tar", "-xvf", "purplpkg/"+pName+".tar", "-C", "purplpkg")
+			install := exec.Command("tar", "-xvf", "/Users/frog/Vector/purplpkg/go/purplpkg/"+pName+".tar", "-C", "/Users/frog/Vector/purplpkg/go/purplpkg")
 			install.Run()
 			fmt.Println("Package installed")
 			clean := exec.Command("rm", ""+pName+".ppkg", ""+pName+".tar")
