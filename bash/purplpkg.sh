@@ -41,7 +41,7 @@ if [ "$1" == "" ]; then
     exit 0
 fi
 
-if [ "$1" != "package-list" ] && [ "$1" != "install" ] && [ "$1" != "mirror-list" ] && [ "$1" != "update" ] && [ "$1" != "remove" ]; then
+if [ "$1" != "package-list" ] && [ "$1" != "install" ] && [ "$1" != "mirror-list" ] && [ "$1" != "list-installed" ] && [ "$1" != "update" ] && [ "$1" != "remove" ]; then
     echo Unknown action "$1"
     exit 1
 fi
@@ -54,13 +54,18 @@ fi
 if [ "$1" == "mirror-list" ]; then
   if [ "$BASE_URL_2" == "" ]; then
     echo Primary mirror: "$BASE_URL"
-    echo Secondary mirror undefined.
     exit 0
   else
     echo Primary mirror: "$BASE_URL"
     echo Secondary mirror: "$BASE_URL_2"
     exit 0
  fi
+fi
+
+if [ "$1" == "list-installed" ]; then
+ echo "Packages currently installed to disk:"
+ echo $(ls -1 /data/purplpkg/files/)
+ exit 0
 fi
 
 if [ "$1" == "remove" ]; then
