@@ -23,8 +23,6 @@ if [ ! -d /data/purplpkg/files ]; then
  mkdir -p /data/purplpkg/files
 fi
 
-#export PATH="$INSTALL_DIR:$PATH"
-
 set -e
 
 cd /data/purplpkg
