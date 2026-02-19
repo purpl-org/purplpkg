@@ -34,6 +34,7 @@ if [ "$1" == "" ]; then
     echo install: Installs a package
     echo update: Updates an installed package
     echo remove: Removes an installed package
+    echo list-installed: Lists installed packages
     echo package-list: Lists currently available packages
     echo mirror-list: Lists currently available mirrors
     exit 0
@@ -131,6 +132,7 @@ if grep -q "<head><title>404 Not Found</title></head>" "$2".ppkg; then
     echo "Package is a 404. Deleting."
     rm "$2".ppkg
     rm versions/"$2"
+    rm files/"$2"
     echo "Check the package name and try again."
     exit 1
 else
