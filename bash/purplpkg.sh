@@ -177,14 +177,24 @@ if [ "$THREE_NOT_FOUND" == "1" ]; then
     echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
     exit 0
 elif [ "$TWO_NOT_FOUND" == "1" ]; then
+    export VERSION=$(curl --silent "$MIRROR_URL"/"$3".version)
     echo "Installing..."
     tar -xzf "$3".ppkg
     echo "Cleaning up..."
     rm "$3".ppkg
-    echo "Package "$3" installed"
+    echo "Package "$3" installed with version "$VERSION""
     #Lower frequency back to "balanced" wire_d preset
     echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
     exit 0
+elif [ "$3" == "" ]; then
+    echo "Installing..."
+    tar -xzf "$2".ppkg
+    echo "Cleaning up..."
+    rm "$2".ppkg
+    echo "Package "$2" installed with version "$VERSION""
+    #Lower frequency back to "balanced" wire_d preset
+    echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    exit 0     
 elif [ ! "$THREE_NOT_FOUND" == "1" ] && [ ! "$TWO_NOT_FOUND" == "1" ]; then
     echo "Installing "$2" and "$3""
     tar -xzf "$2".ppkg
