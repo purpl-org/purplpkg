@@ -53,10 +53,12 @@ fi
 if [ "$1" == "mirror-list" ]; then
   if [ "$BASE_URL_2" == "" ]; then
     echo Primary mirror: "$BASE_URL"
+    echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
     exit 0
   else
     echo Primary mirror: "$BASE_URL"
     echo Secondary mirror: "$BASE_URL_2"
+    echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
     exit 0
  fi
 fi
@@ -64,33 +66,39 @@ fi
 if [ "$1" == "list-installed" ]; then
  echo "Packages currently installed to disk:"
  echo $(ls -1 /data/purplpkg/files/)
+ echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
  exit 0
 fi
 
 if [ "$1" == "remove" ]; then
  if [ "$2" == "" ]; then
   echo "Package not specified"
+  echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
   exit 1
  elif [ ! -f /data/purplpkg/files/"$2" ]; then
   echo "Package "$2" isn't installed."
+  echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
   exit 1
  fi
  echo "Removing package "$2""
  rm $(cat /data/purplpkg/files/"$2")
  rm /data/purplpkg/files/"$2"
  rm /data/purplpkg/versions/"$2" 
- echo "Package "$2" removed." 
+ echo "Package "$2" removed."
+ echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 
  exit 0
 fi
 
 if [ "$1" == "update" ]; then
    if [ ! -f versions/"$2" ]; then
      echo No such package "$2"
+     echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
      exit 1
    else
      echo Installed version of package "$2" is $(cat versions/"$2")
     if [ $(curl --silent "$MIRROR_URL"/"$2".version) == $(cat versions/"$2") ]; then
      echo Package "$2" already up to date.
+     echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
      exit 0
     else
      export VERSION=$(curl --silent "$MIRROR_URL"/"$2".version)
@@ -113,11 +121,13 @@ fi
 
 if [ "$2" == "" ]; then
     echo No package given
+    echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
     exit 1
 fi
 
 if [ ! "$PWD" == /data/purplpkg ]; then
     echo "We are in the wrong directory. Exiting..."
+    echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
     exit 1
 fi
 
@@ -164,6 +174,7 @@ if [ -f "/data/purplpkg/"$3".ppkg" ]; then
 fi
 
 if [ "$THREE_NOT_FOUND" == "1" ] && [ "$TWO_NOT_FOUND" == "1" ]; then
+ echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
  exit 1
 fi
 
@@ -207,3 +218,5 @@ elif [ ! "$THREE_NOT_FOUND" == "1" ] && [ ! "$TWO_NOT_FOUND" == "1" ]; then
     echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
     exit 0
 fi
+
+echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
