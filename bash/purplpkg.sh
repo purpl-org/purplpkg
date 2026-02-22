@@ -33,6 +33,12 @@ set -e
 
 cd /data/purplpkg
 
+if [ ! "$PWD" == /data/purplpkg ]; then
+    echo "We are in the wrong directory. Exiting..."
+    echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    exit 1
+fi
+
 if [ "$1" == "" ]; then
     echo purplpkg by purpl
     echo -------------------
@@ -130,12 +136,6 @@ fi
 
 if [ "$2" == "" ]; then
     echo No package given
-    echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
-    exit 1
-fi
-
-if [ ! "$PWD" == /data/purplpkg ]; then
-    echo "We are in the wrong directory. Exiting..."
     echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
     exit 1
 fi
