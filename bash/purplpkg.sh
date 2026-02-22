@@ -13,14 +13,17 @@ BASE_URL_2=""
 
 if [ "$DEBUG" == "1" ]; then
   MIRROR_URL="https://www.froggitti.net/vector-mirror-debug"
+  DEBUG_PPKG=1
 else
   MIRROR_URL="https://www.froggitti.net/vector-mirror"
 fi
 
 if [ "$(emr-cat e)" == "00804577" ]; then
   MIRROR_URL="https://www.froggitti.net/vector-mirror-debug"
+  DEBUG_PPKG=1
 elif [ "$(emr-cat e)" == "0dd1f616" ]; then
   MIRROR_URL="https://www.froggitti.net/vector-mirror-debug"
+  DEBUG_PPKG=1
 fi
 
 if [ ! -d /data/purplpkg ]; then
@@ -37,7 +40,9 @@ fi
 
 set -e
 
-echo "$MIRROR_URL"
+if [ "$DEBUG_PPKG" == "1" ]; then
+  echo "$MIRROR_URL"
+fi
 
 cd /data/purplpkg
 
