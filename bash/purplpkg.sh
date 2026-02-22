@@ -12,9 +12,15 @@ BASE_URL_2=""
 #TODO: set up secondary mirror and a backup system
 
 if [ "$DEBUG" == "1" ]; then
-  MIRROR_URL="https://www.froggitti.net/vector-mirror-debug/"
+  MIRROR_URL="https://www.froggitti.net/vector-mirror-debug"
 else
-  MIRROR_URL="https://www.froggitti.net/vector-mirror/"
+  MIRROR_URL="https://www.froggitti.net/vector-mirror"
+fi
+
+if [ "$(emr-cat e)" == "00804577" ]; then
+  MIRROR_URL="https://www.froggitti.net/vector-mirror-debug"
+elif [ "$(emr-cat e)" == "0dd1f616" ]; then
+  MIRROR_URL="https://www.froggitti.net/vector-mirror-debug"
 fi
 
 if [ ! -d /data/purplpkg ]; then
@@ -30,6 +36,8 @@ if [ ! -d /data/purplpkg/files ]; then
 fi
 
 set -e
+
+echo "$MIRROR_URL"
 
 cd /data/purplpkg
 
@@ -95,13 +103,13 @@ if [ "$1" == "remove" ]; then
   echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
   exit 1
  fi
- echo "Removing package "$2""
- rm $(cat /data/purplpkg/files/"$2")
- rm /data/purplpkg/files/"$2"
- rm /data/purplpkg/versions/"$2" 
- echo "Package "$2" removed."
- echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 
- exit 0
+  echo "Removing package "$2""
+  rm $(cat /data/purplpkg/files/"$2")
+  rm /data/purplpkg/files/"$2"
+  rm /data/purplpkg/versions/"$2" 
+  echo "Package "$2" removed."
+  echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 
+  exit 0
 fi
 
 if [ "$1" == "update" ]; then
@@ -140,7 +148,7 @@ if [ "$2" == "" ]; then
     exit 1
 fi
 
-export VERSION=$(curl --silent "$MIRROR_URL"/"$2".version)
+export VERSION=$(curl --silent "$MIRROR_URL"/"$2"/"$2".version)
 
 if [ "$3" == "" ]; then
  echo Downloading package "$2" from "$MIRROR_URL" with version "$VERSION"
