@@ -9,7 +9,13 @@ echo 1267200 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 BASE_URL="https://www.froggitti.net/vector-mirror/"
 BASE_URL_2=""
 
-MIRROR_URL="https://www.froggitti.net/vector-mirror/"
+#TODO: set up secondary mirror and a backup system
+
+if [ "$DEBUG" == "1" ]; then
+  MIRROR_URL="https://www.froggitti.net/vector-mirror-debug/"
+else
+  MIRROR_URL="https://www.froggitti.net/vector-mirror/"
+fi
 
 if [ ! -d /data/purplpkg ]; then
  mkdir -p /data/purplpkg
@@ -191,6 +197,7 @@ if [ "$THREE_NOT_FOUND" == "1" ]; then
     echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
     exit 0
 elif [ "$TWO_NOT_FOUND" == "1" ]; then
+ if [ -f "/data/purplpkg/"$3".ppkg" ]; then
     export VERSION=$(curl --silent "$MIRROR_URL"/"$3".version)
     echo "Installing..."
     tar -xzf "$3".ppkg
@@ -200,6 +207,9 @@ elif [ "$TWO_NOT_FOUND" == "1" ]; then
     #Lower frequency back to "balanced" wire_d preset
     echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
     exit 0
+ else
+    exit 1
+ fi
 elif [ "$3" == "" ]; then
     echo "Installing..."
     tar -xzf "$2".ppkg
