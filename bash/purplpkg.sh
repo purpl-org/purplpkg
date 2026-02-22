@@ -111,17 +111,17 @@ if [ "$1" == "update" ]; then
      exit 1
    else
      echo Installed version of package "$2" is $(cat versions/"$2")
-    if [ $(curl --silent "$MIRROR_URL"/"$2".version) == $(cat versions/"$2") ]; then
+    if [ $(curl --silent "$MIRROR_URL"/"$2"/"$2".version) == $(cat versions/"$2") ]; then
      echo Package "$2" already up to date.
      echo 533333 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
      exit 0
     else
-     export VERSION=$(curl --silent "$MIRROR_URL"/"$2".version)
+     export VERSION=$(curl --silent "$MIRROR_URL"/"$2"/"$2".version)
      rm $(cat /data/purplpkg/files/"$2")
      echo Downloading updated package "$2" from "$MIRROR_URL" with version "$VERSION"
-     curl -o /data/purplpkg/"$2".ppkg "$MIRROR_URL"/"$2".ppkg
-     curl --silent -o /data/purplpkg/versions/"$2" "$MIRROR_URL"/"$2".version
-     curl --silent -o /data/purplpkg/files/"$2" "$MIRROR_URL"/"$2".flist
+     curl -o /data/purplpkg/"$2".ppkg "$MIRROR_URL"/"$2"/"$2".ppkg
+     curl --silent -o /data/purplpkg/versions/"$2" "$MIRROR_URL"/"$2"/"$2".version
+     curl --silent -o /data/purplpkg/files/"$2" "$MIRROR_URL"/"$2"/"$2".flist
      echo "Updating..."
      tar -xzf "$2".ppkg
      echo "Cleaning up..."
@@ -144,22 +144,22 @@ export VERSION=$(curl --silent "$MIRROR_URL"/"$2".version)
 
 if [ "$3" == "" ]; then
  echo Downloading package "$2" from "$MIRROR_URL" with version "$VERSION"
- curl -o /data/purplpkg/"$2".ppkg "$MIRROR_URL"/"$2".ppkg
- curl --silent -o /data/purplpkg/versions/"$2" "$MIRROR_URL"/"$2".version
- curl --silent -o /data/purplpkg/files/"$2" "$MIRROR_URL"/"$2".flist
+ curl -o /data/purplpkg/"$2".ppkg "$MIRROR_URL"/"$2"/"$2".ppkg
+ curl --silent -o /data/purplpkg/versions/"$2" "$MIRROR_URL"/"$2"/"$2".version
+ curl --silent -o /data/purplpkg/files/"$2" "$MIRROR_URL"/"$2"/"$2".flist
 else
  #package 1
  echo Downloading package "$2" and "$3" from "$MIRROR_URL"
- curl -o /data/purplpkg/"$2".ppkg "$MIRROR_URL"/"$2".ppkg
- curl --silent -o /data/purplpkg/versions/"$2" "$MIRROR_URL"/"$2".version
- curl --silent -o /data/purplpkg/files/"$2" "$MIRROR_URL"/"$2".flist
+ curl -o /data/purplpkg/"$2".ppkg "$MIRROR_URL"/"$2"/"$2".ppkg
+ curl --silent -o /data/purplpkg/versions/"$2" "$MIRROR_URL"/"$2"/"$2".version
+ curl --silent -o /data/purplpkg/files/"$2" "$MIRROR_URL"/"$2"/"$2".flist
 
  #echo Downloading "$3"
 
  #package 2
- curl -o /data/purplpkg/"$3".ppkg "$MIRROR_URL"/"$3".ppkg
- curl --silent -o /data/purplpkg/versions/"$3" "$MIRROR_URL"/"$3".version
- curl --silent -o /data/purplpkg/files/"$3" "$MIRROR_URL"/"$3".flist
+ curl -o /data/purplpkg/"$3".ppkg "$MIRROR_URL"/"$3"/"$3".ppkg
+ curl --silent -o /data/purplpkg/versions/"$3" "$MIRROR_URL"/"$3"/"$3".version
+ curl --silent -o /data/purplpkg/files/"$3" "$MIRROR_URL"/"$3"/"$3".flist
 fi
 
 if grep -q "<head><title>404 Not Found</title></head>" "$2".ppkg; then
