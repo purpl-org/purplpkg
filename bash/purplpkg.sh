@@ -7,7 +7,7 @@
 echo 1267200 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
 
 BASE_URL="https://www.froggitti.net/vector-mirror/"
-BASE_URL_2=""
+BASE_URL_2="https://raw.githubusercontent.com/Lrdsnow/snowypurplpkgrepo/refs/heads/main/"
 
 #TODO: set up secondary mirror and a backup system
 
