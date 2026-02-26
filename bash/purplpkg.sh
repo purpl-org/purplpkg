@@ -42,6 +42,11 @@ function checkavailable {
   exit 0
 }
 
+function update {
+  echo "To be implemented"
+  exit 0
+}
+
 function download {
   echo "To be implemented"
   exit 0  
@@ -52,8 +57,3 @@ function install {
   exit 0
 }
 
-checkavailable
-
-download
-
-install
