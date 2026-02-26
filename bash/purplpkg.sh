@@ -24,3 +24,13 @@ fi
 if [ ! -f "/data/purplpkg/mirrorlist" ]; then
   curl -o "/data/purplpkg/mirrorlist" https://raw.githubusercontent.com/purpl-org/purplpkg/refs/heads/rewrite/bash/mirrorlist
 fi
+
+if [ "$1" == "" ]; then
+  echo "purplpkg: missing function"
+  echo "Try: purplpkg --help" 
+fi
+
+if [ "$1" == "--help" ]; then
+  echo "purplpkg - Package manager for Vector"
+  echo "Functions:"
+fi
