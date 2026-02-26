@@ -38,8 +38,9 @@ fi
 ########################## Functions ##########################
 
 function checkavailable {
-  echo "To be implemented"
-  exit 0
+  for i in ${@:1}; do
+    curl --silent --fail $(head -n 1 "$MIRROR_TRACKING_FILE")
+  done
 }
 
 function update {
@@ -48,7 +49,9 @@ function update {
 }
 
 function download {
-  echo "To be implemented"
+  for i in ${@:1}; do
+    curl -o "$BIN_DIR/$i.ppkg" 
+  done
   exit 0  
 }
 
