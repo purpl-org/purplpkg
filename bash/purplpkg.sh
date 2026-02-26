@@ -34,3 +34,26 @@ if [ "$1" == "--help" ]; then
   echo "purplpkg - Package manager for Vector"
   echo "Functions:"
 fi
+
+########################## Functions ##########################
+
+function checkavailable {
+  echo "To be implemented"
+  exit 0
+}
+
+function download {
+  echo "To be implemented"
+  exit 0  
+}
+
+function install {
+  echo "To be implemented"
+  exit 0
+}
+
+checkavailable
+
+download
+
+install
