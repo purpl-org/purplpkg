@@ -41,9 +41,16 @@ function checkavailable {
   for i in ${@:1}; do
     if curl --fail --silent "$(head -n 1 "$MIRROR_TRACKING_FILE")/$i/$i.ppkg" > /dev/null; then
       echo "Package exists on main mirror"
+      SELECTED_MIRROR="$(sed -n '1p' "$MIRROR_TRACKING_FILE")"
     else
       echo "Package not found on main mirror, trying secondary"
-      sed -n '2p' "$MIRROR_TRACKING_FILE"
+      if curl --fail --silent "$(sed -n '2p' "$MIRROR_TRACKING_FILE")/$i/$i.ppkg" > /dev/null; then
+       echo "Package exists on secondary mirror"
+       SELECTED_MIRROR="$(sed -n '2p' "$MIRROR_TRACKING_FILE")"
+      else
+       echo "Packages don't exist on primary or secondary mirror."
+       exit 1
+      fi
     fi
   done
 }
@@ -55,9 +62,8 @@ function update {
 
 function download {
   for i in ${@:1}; do
-    curl -o "$BIN_DIR/$i.ppkg" $(sed -n '1p' "$MIRROR_TRACKING_FILE")/$i/$i.ppkg
+    curl -o "$BIN_DIR/$i.ppkg" $SELECTED_MIRROR/$i/$i.ppkg
   done
-  exit 0  
 }
 
 function install {
@@ -72,6 +78,7 @@ if [ "$1" == "install" ]; then
    echo "Error: Missing package name"
    exit 1
   else
+   checkavailable "${@:2}"
    download "${@:2}"
   fi
 fi
