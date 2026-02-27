@@ -5,8 +5,8 @@
 set -e
 
 BIN_DIR="/data/purplpkg"
-VERSION_TRACKING_DIR="/data/purplpkg/files"
-FILE_TRACKING_DIR="/data/purplpkg/versions"
+VERSION_TRACKING_DIR="/data/purplpkg/versions"
+FILE_TRACKING_DIR="/data/purplpkg/files"
 MIRROR_TRACKING_FILE="/data/purplpkg/mirrorlist"
 
 if [ ! -d "/data/purplpkg" ]; then 
@@ -22,7 +22,7 @@ if [ ! -d "/data/purplpkg/versions" ]; then
 fi
 
 if [ ! -f "/data/purplpkg/mirrorlist" ]; then
-  curl -o "/data/purplpkg/mirrorlist" https://raw.githubusercontent.com/purpl-org/purplpkg/refs/heads/rewrite/bash/mirrorlist
+  curl --silent -o "/data/purplpkg/mirrorlist" https://raw.githubusercontent.com/purpl-org/purplpkg/refs/heads/rewrite/bash/mirrorlist
 fi
 
 if [ "$1" == "" ]; then
@@ -39,7 +39,12 @@ fi
 
 function checkavailable {
   for i in ${@:1}; do
-    curl --silent --fail $(head -n 1 "$MIRROR_TRACKING_FILE")
+    if curl --fail --silent "$(head -n 1 "$MIRROR_TRACKING_FILE")/$i/$i.ppkg" > /dev/null; then
+      echo "Package exists on main mirror"
+    else
+      echo "Package not found on main mirror, trying secondary"
+      sed -n '2p' "$MIRROR_TRACKING_FILE"
+    fi
   done
 }
 
@@ -50,7 +55,7 @@ function update {
 
 function download {
   for i in ${@:1}; do
-    curl -o "$BIN_DIR/$i.ppkg" 
+    curl -o "$BIN_DIR/$i.ppkg" $(sed -n '1p' "$MIRROR_TRACKING_FILE")/$i/$i.ppkg
   done
   exit 0  
 }
@@ -60,3 +65,13 @@ function install {
   exit 0
 }
 
+###############################################################
+
+if [ "$1" == "install" ]; then
+  if [ "$2" == "" ]; then
+   echo "Error: Missing package name"
+   exit 1
+  else
+   download "${@:2}"
+  fi
+fi
