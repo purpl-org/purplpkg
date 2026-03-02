@@ -12,6 +12,8 @@ MIRROR_TRACKING_FILE_SOURCE="https://raw.githubusercontent.com/purpl-org/purplpk
 
 mkdir -p "$BIN_DIR" "$FILE_TRACKING_DIR" "$VERSION_TRACKING_DIR"
 
+cd "$BIN_DIR"
+
 if [ ! -f "$MIRROR_TRACKING_FILE" ]; then
   curl --silent -o "$MIRROR_TRACKING_FILE" "$MIRROR_TRACKING_FILE_SOURCE"
 fi
@@ -32,12 +34,11 @@ fi
 function checkavailable {
   for i in ${@:1}; do
     if curl -L --fail --silent "$(head -n 1 "$MIRROR_TRACKING_FILE")/$i/$i.ppkg" > /dev/null; then
-      echo "Downloading from main mirror..."
       SELECTED_MIRROR="$(sed -n '1p' "$MIRROR_TRACKING_FILE")"
     else
       echo "Package not found on main mirror, trying secondary"
       if curl -L --fail --silent "$(sed -n '2p' "$MIRROR_TRACKING_FILE")/$i/$i.ppkg" > /dev/null; then
-       echo "Package exists on secondary mirror. Downloading from secondary mirror..."
+       echo "Package exists on secondary mirror."
        SELECTED_MIRROR="$(sed -n '2p' "$MIRROR_TRACKING_FILE")"
       else
        echo "Packages don't exist on primary or secondary mirror."
@@ -55,6 +56,7 @@ function checkavailable {
 
 function download {
   for i in ${@:1}; do
+    echo "Downloading package $i..."
     curl -L -o "$BIN_DIR/$i.ppkg" "$SELECTED_MIRROR/$i/$i.ppkg"
     curl --silent -L -o "$VERSION_TRACKING_DIR/$i" "$SELECTED_MIRROR/$i/$i.version"
     curl --silent -L -o "$FILE_TRACKING_DIR/$i" "$SELECTED_MIRROR/$i/$i.flist"
@@ -62,8 +64,11 @@ function download {
 }
 
 function install {
-  echo "To be implemented"
-  exit 0
+  for i in ${@:1}; do
+    tar -xzf "$i".ppkg
+    rm "$i".ppkg
+    echo "Package $i installed."
+  done
 }
 
 function update {
@@ -78,7 +83,9 @@ function remove {
     if [ ! -f "$FILE_TRACKING_DIR/$i" ]; then
       echo "Package $i is not installed."
     else
-      rm "$(cat "$FILE_TRACKING_DIR/$i")"
+      rm $(cat "$FILE_TRACKING_DIR/$i")
+      rm "$FILE_TRACKING_DIR/$i"
+      rm "$VERSION_TRACKING_DIR/$i"
     fi
   done
 }
@@ -88,12 +95,12 @@ function remove {
 
 if [ "$1" == "install" ]; then
   if [ "$2" == "" ]; then
-   echo "Error: Missing package name"
+   echo "Error: Missing package"
    exit 1
   else
    checkavailable "${@:2}"
    download "${@:2}"
-   #install "${@:2}"
+   install "${@:2}"
   fi
 fi
 
