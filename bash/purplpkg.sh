@@ -5,24 +5,15 @@
 set -e
 
 BIN_DIR="/data/purplpkg"
-VERSION_TRACKING_DIR="/data/purplpkg/versions"
 FILE_TRACKING_DIR="/data/purplpkg/files"
+VERSION_TRACKING_DIR="/data/purplpkg/versions"
 MIRROR_TRACKING_FILE="/data/purplpkg/mirrorlist"
+MIRROR_TRACKING_FILE_SOURCE="https://raw.githubusercontent.com/purpl-org/purplpkg/refs/heads/rewrite/bash/mirrorlist"
 
-if [ ! -d "/data/purplpkg" ]; then 
-  mkdir -p "/data/purplpkg"
-fi
+mkdir -p "$BIN_DIR" "$FILE_TRACKING_DIR" "$VERSION_TRACKING_DIR"
 
-if [ ! -d "/data/purplpkg/files" ]; then 
-  mkdir -p "/data/purplpkg/files"
-fi
-
-if [ ! -d "/data/purplpkg/versions" ]; then 
-  mkdir -p "/data/purplpkg/versions"
-fi
-
-if [ ! -f "/data/purplpkg/mirrorlist" ]; then
-  curl --silent -o "/data/purplpkg/mirrorlist" https://raw.githubusercontent.com/purpl-org/purplpkg/refs/heads/rewrite/bash/mirrorlist
+if [ ! -f "$MIRROR_TRACKING_FILE" ]; then
+  curl --silent -o "$MIRROR_TRACKING_FILE" "$MIRROR_TRACKING_FILE_SOURCE"
 fi
 
 if [ "$1" == "" ]; then
@@ -33,6 +24,7 @@ fi
 if [ "$1" == "--help" ]; then
   echo "purplpkg - Package manager for Vector"
   echo "Functions:"
+  echo "Install <package>: Installs a package"
 fi
 
 ########################## Functions ##########################
@@ -40,12 +32,12 @@ fi
 function checkavailable {
   for i in ${@:1}; do
     if curl -L --fail --silent "$(head -n 1 "$MIRROR_TRACKING_FILE")/$i/$i.ppkg" > /dev/null; then
-      echo "Package exists on main mirror"
+      echo "Downloading from main mirror..."
       SELECTED_MIRROR="$(sed -n '1p' "$MIRROR_TRACKING_FILE")"
     else
       echo "Package not found on main mirror, trying secondary"
       if curl -L --fail --silent "$(sed -n '2p' "$MIRROR_TRACKING_FILE")/$i/$i.ppkg" > /dev/null; then
-       echo "Package exists on secondary mirror"
+       echo "Package exists on secondary mirror. Downloading from secondary mirror..."
        SELECTED_MIRROR="$(sed -n '2p' "$MIRROR_TRACKING_FILE")"
       else
        echo "Packages don't exist on primary or secondary mirror."
@@ -61,16 +53,11 @@ function checkavailable {
   done
 }
 
-function update {
-  echo "To be implemented"
-  exit 0
-}
-
 function download {
   for i in ${@:1}; do
-    curl -L -o "$BIN_DIR/$i.ppkg" $SELECTED_MIRROR/$i/$i.ppkg
-    curl --silent -L -o "$VERSION_TRACKING_DIR/$i" $SELECTED_MIRROR/$i/$i.version
-    curl --silent -L -o "$FILE_TRACKING_DIR/$i" $SELECTED_MIRROR/$i/$i.flist
+    curl -L -o "$BIN_DIR/$i.ppkg" "$SELECTED_MIRROR/$i/$i.ppkg"
+    curl --silent -L -o "$VERSION_TRACKING_DIR/$i" "$SELECTED_MIRROR/$i/$i.version"
+    curl --silent -L -o "$FILE_TRACKING_DIR/$i" "$SELECTED_MIRROR/$i/$i.flist"
   done
 }
 
@@ -78,6 +65,24 @@ function install {
   echo "To be implemented"
   exit 0
 }
+
+function update {
+  echo "Updating..."
+  curl --silent -o "$MIRROR_TRACKING_FILE" "$MIRROR_TRACKING_FILE_SOURCE"
+  echo "Mirror list updated."
+  exit 0
+}
+
+function remove {
+  for i in ${@:1}; do
+    if [ ! -f "$FILE_TRACKING_DIR/$i" ]; then
+      echo "Package $i is not installed."
+    else
+      rm "$(cat "$FILE_TRACKING_DIR/$i")"
+    fi
+  done
+}
+
 
 ###############################################################
 
@@ -88,6 +93,14 @@ if [ "$1" == "install" ]; then
   else
    checkavailable "${@:2}"
    download "${@:2}"
-   install "${@:2}"
+   #install "${@:2}"
   fi
+fi
+
+if [ "$1" == "update" ]; then
+  update
+fi
+
+if [ "$1" == "remove" ]; then
+  remove "${@:2}"
 fi
