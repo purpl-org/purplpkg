@@ -138,4 +138,12 @@ if [ "$1" == "remove" ]; then
   remove "${@:2}"
 fi
 
+if [ "$1" == "utility" ]; then
+  if [ "$2" == "" ]; then
+    echo "Enter a utility command."
+  elif [ "$2" == "install-wireos-recovery" ]; then
+    curl --fail "$(sed -n '1p' "$MIRROR_TRACKING_FILE")"/recovery-images/wireos-recovery-ppkg/install.sh | bash
+  fi
+fi
+
 ###############################################################
