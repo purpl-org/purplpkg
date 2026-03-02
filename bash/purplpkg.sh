@@ -2,6 +2,8 @@
 
 #purplpkg - a simple package manager for the Vector robot
 
+###############################################################
+
 set -e
 
 BIN_DIR="/data/purplpkg"
@@ -10,7 +12,12 @@ VERSION_TRACKING_DIR="/data/purplpkg/versions"
 MIRROR_TRACKING_FILE="/data/purplpkg/mirrorlist"
 MIRROR_TRACKING_FILE_SOURCE="https://raw.githubusercontent.com/purpl-org/purplpkg/refs/heads/rewrite/bash/mirrorlist"
 
-mkdir -p "$BIN_DIR" "$FILE_TRACKING_DIR" "$VERSION_TRACKING_DIR"
+if [ ! -d "$BIN_DIR" ] || [ ! -d "$FILE_TRACKING_DIR" ] || [ ! -d "$VERSION_TRACKING_DIR" ]; then
+  clear
+  echo "First use detected. Making directories..."
+  mkdir -p "$BIN_DIR" "$FILE_TRACKING_DIR" "$VERSION_TRACKING_DIR"
+  sleep 1s
+fi
 
 cd "$BIN_DIR"
 
@@ -19,14 +26,21 @@ if [ ! -f "$MIRROR_TRACKING_FILE" ]; then
 fi
 
 if [ "$1" == "" ]; then
-  echo "purplpkg: missing function"
+  echo "purplpkg: missing operation"
   echo "Try: purplpkg --help" 
 fi
 
 if [ "$1" == "--help" ]; then
-  echo "purplpkg - Package manager for Vector"
-  echo "Functions:"
-  echo "Install <package>: Installs a package"
+  echo "usage: purplpkg <command> [PACKAGE]"
+  echo ""
+  echo "Commands:"
+  echo "  install <package>    Install a package"
+  echo "  remove <package>     Remove a package"
+  echo "  update               Update the mirror list"
+  echo "  upgrade              Updates all installed packages"
+  echo ""
+  echo "Options:"
+  echo "  --help               Show this message"
 fi
 
 ########################## Functions ##########################
@@ -78,6 +92,14 @@ function update {
   exit 0
 }
 
+function upgrade {
+  for i in $(ls "$FILE_TRACKING_DIR"); do
+    checkavailable "$i"
+    download "$i"
+    install "$i"
+  done
+}
+
 function remove {
   for i in ${@:1}; do
     if [ ! -f "$FILE_TRACKING_DIR/$i" ]; then
@@ -89,7 +111,6 @@ function remove {
     fi
   done
 }
-
 
 ###############################################################
 
@@ -108,6 +129,13 @@ if [ "$1" == "update" ]; then
   update
 fi
 
+if [ "$1" == "upgrade" ]; then
+  echo "Performing an all-package upgrade"  
+  upgrade
+fi
+
 if [ "$1" == "remove" ]; then
   remove "${@:2}"
 fi
+
+###############################################################
