@@ -38,6 +38,7 @@ if [ "$1" == "--help" ]; then
   echo "  remove <package>     Remove a package"
   echo "  update               Update the mirror list"
   echo "  upgrade              Updates all installed packages"
+  echo "  utility <utility>    Performs a utility action"
   echo ""
   echo "Options:"
   echo "  --help               Show this message"
