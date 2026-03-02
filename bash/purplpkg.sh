@@ -39,17 +39,23 @@ fi
 
 function checkavailable {
   for i in ${@:1}; do
-    if curl --fail --silent "$(head -n 1 "$MIRROR_TRACKING_FILE")/$i/$i.ppkg" > /dev/null; then
+    if curl -L --fail --silent "$(head -n 1 "$MIRROR_TRACKING_FILE")/$i/$i.ppkg" > /dev/null; then
       echo "Package exists on main mirror"
       SELECTED_MIRROR="$(sed -n '1p' "$MIRROR_TRACKING_FILE")"
     else
       echo "Package not found on main mirror, trying secondary"
-      if curl --fail --silent "$(sed -n '2p' "$MIRROR_TRACKING_FILE")/$i/$i.ppkg" > /dev/null; then
+      if curl -L --fail --silent "$(sed -n '2p' "$MIRROR_TRACKING_FILE")/$i/$i.ppkg" > /dev/null; then
        echo "Package exists on secondary mirror"
        SELECTED_MIRROR="$(sed -n '2p' "$MIRROR_TRACKING_FILE")"
       else
        echo "Packages don't exist on primary or secondary mirror."
-       exit 1
+       echo "-----------------------------------"
+       cat "$MIRROR_TRACKING_FILE"
+       echo "-----------------------------------"
+       echo "Please find the URL of the mirror you have verified to have the package you want and paste it below."
+       echo "Or, if you have your own mirror that is not in the mirrorlist you can use that."
+       read -p "Enter mirror URL: " cmirror
+       SELECTED_MIRROR="$cmirror"
       fi
     fi
   done
@@ -62,7 +68,9 @@ function update {
 
 function download {
   for i in ${@:1}; do
-    curl -o "$BIN_DIR/$i.ppkg" $SELECTED_MIRROR/$i/$i.ppkg
+    curl -L -o "$BIN_DIR/$i.ppkg" $SELECTED_MIRROR/$i/$i.ppkg
+    curl --silent -L -o "$VERSION_TRACKING_DIR/$i" $SELECTED_MIRROR/$i/$i.version
+    curl --silent -L -o "$FILE_TRACKING_DIR/$i" $SELECTED_MIRROR/$i/$i.flist
   done
 }
 
@@ -80,5 +88,6 @@ if [ "$1" == "install" ]; then
   else
    checkavailable "${@:2}"
    download "${@:2}"
+   install "${@:2}"
   fi
 fi
