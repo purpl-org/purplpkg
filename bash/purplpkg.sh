@@ -10,7 +10,7 @@ BIN_DIR="/data/purplpkg"
 FILE_TRACKING_DIR="/data/purplpkg/files"
 VERSION_TRACKING_DIR="/data/purplpkg/versions"
 MIRROR_TRACKING_FILE="/data/purplpkg/mirrorlist"
-MIRROR_TRACKING_FILE_SOURCE="https://raw.githubusercontent.com/purpl-org/purplpkg/refs/heads/rewrite/bash/mirrorlist"
+MIRROR_TRACKING_FILE_SOURCE="https://raw.githubusercontent.com/purpl-org/purplpkg/refs/heads/main/bash/mirrorlist"
 
 if [ ! -d "$BIN_DIR" ] || [ ! -d "$FILE_TRACKING_DIR" ] || [ ! -d "$VERSION_TRACKING_DIR" ]; then
   clear
