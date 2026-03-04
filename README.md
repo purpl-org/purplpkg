@@ -13,7 +13,7 @@ fastfetch.ppkg
 (end of fastfetch.ppkg)
 ```
 
-fastfetch being a runner script for fastfetch-bin so that colors and ascii art are correct.
+fastfetch being a runner script for fastfetch-bin so that colors and ascii art are correct. If your binary can run stanalone this is not necessary.
 
 ## Versioning
 Just make a file with your package name and .version for the extension. The version number can be whatever just make it make sense.
@@ -21,7 +21,7 @@ Just make a file with your package name and .version for the extension. The vers
 Example:
 
 ```
-fastfetch.version = 1.0.0
+file fastfetch.version contains: 1.0.0
 ```
 
 ## File tracking
