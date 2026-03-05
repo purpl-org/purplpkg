@@ -1,19 +1,40 @@
 # purplpkg
-Bash/Go package manager for Vector
+Package manager for Vector
 
-# Go port currently in development
-## Package handling
-The way the package manager installs packages is by downloading the tar.gz, uncompressing and extracting it to the root of /data/purplpkg..<br>
+## .ppkg structure
+Packages are .tar.gz files with a .ppkg extension. 
 
-Package structure should be as such<br>
-I will use update as an example
+Package structure should be similar to:
+
 ```
-update.flist
-update.version
-update.ppkg
- / update
+fastfetch.ppkg
+    /fastfetch
+    /fastfetch-bin
+(end of fastfetch.ppkg)
 ```
-update being the file that goes into /data/purplpkg.
+
+fastfetch being a runner script for fastfetch-bin so that colors and ascii art are correct. If your binary can run stanalone this is not necessary.
+
+## Versioning
+Just make a file titled your package name and .version for the extension. The version number can be whatever just make it make sense.
+
+Example:
+
+```
+file fastfetch.version contains: 1.0.0
+```
+
+## File tracking
+Make a file with your package name and .flist for the extension.<br>
+This file should contain every file that is in the .ppkg file.
+
+```
+fastfetch.flist contains:
+
+fastfetch
+fastfetch-bin
+```
+
 ## Todo
 - Make the Go version functionally identical to the Bash version
 ## Goals
