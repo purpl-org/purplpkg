@@ -45,6 +45,11 @@ if [ "$1" == "--help" ]; then
   echo ""
   echo "Options:"
   echo "  --help               Show this message"
+  echo "  --version            Print the installed version of purplpkg"
+fi
+
+if [ "$1" == "--version" ]; then
+  echo "purplpkg v"$VERSION""
 fi
 
 ########################## Functions ##########################
