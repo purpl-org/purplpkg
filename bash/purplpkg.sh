@@ -6,6 +6,8 @@
 
 set -e
 
+VERSION="1.0"
+
 BIN_DIR="/data/purplpkg"
 FILE_TRACKING_DIR="/data/purplpkg/files"
 VERSION_TRACKING_DIR="/data/purplpkg/versions"
@@ -31,6 +33,7 @@ if [ "$1" == "" ]; then
 fi
 
 if [ "$1" == "--help" ]; then
+  echo "purplpkg v"$VERSION""
   echo "usage: purplpkg <command> [PACKAGE]"
   echo ""
   echo "Commands:"
@@ -48,24 +51,28 @@ fi
 
 function checkavailable {
   for i in ${@:1}; do
-    if curl -L --fail --silent "$(head -n 1 "$MIRROR_TRACKING_FILE")/$i/$i.ppkg" > /dev/null; then
-      SELECTED_MIRROR="$(sed -n '1p' "$MIRROR_TRACKING_FILE")"
+    if [ -f "/lib/ld-linux-armhf.so.3" ]; then
+      SELECTED_MIRROR="$(sed -n '3p' "$MIRROR_TRACKING_FILE")"
     else
-      echo "Package not found on main mirror, trying secondary"
-      if curl -L --fail --silent "$(sed -n '2p' "$MIRROR_TRACKING_FILE")/$i/$i.ppkg" > /dev/null; then
-       echo "Package exists on secondary mirror."
-       SELECTED_MIRROR="$(sed -n '2p' "$MIRROR_TRACKING_FILE")"
+      if curl -L --fail --silent "$(head -n 1 "$MIRROR_TRACKING_FILE")/$i/$i.ppkg" > /dev/null; then
+        SELECTED_MIRROR="$(sed -n '1p' "$MIRROR_TRACKING_FILE")"
       else
-       echo "Packages don't exist on primary or secondary mirror."
-       echo "-----------------------------------"
-       cat "$MIRROR_TRACKING_FILE"
-       echo "-----------------------------------"
-       echo "Please find the URL of the mirror you have verified to have the package you want and paste it below."
-       echo "Or, if you have your own mirror that is not in the mirrorlist you can use that."
-       read -p "Enter mirror URL: " cmirror
-       SELECTED_MIRROR="$cmirror"
+          echo "Package not found on main mirror, trying secondary"
+        if curl -L --fail --silent "$(sed -n '2p' "$MIRROR_TRACKING_FILE")/$i/$i.ppkg" > /dev/null; then
+          echo "Package exists on secondary mirror."
+          SELECTED_MIRROR="$(sed -n '2p' "$MIRROR_TRACKING_FILE")"
+        else
+          echo "Packages don't exist on primary or secondary mirror."
+          echo "-----------------------------------"
+          cat "$MIRROR_TRACKING_FILE"
+          echo "-----------------------------------"
+          echo "Please find the URL of the mirror you have verified to have the package you want and paste it below."
+          echo "Or, if you have your own mirror that is not in the mirrorlist you can use that."
+          read -p "Enter mirror URL: " cmirror
+          SELECTED_MIRROR="$cmirror"
+        fi
+       fi
       fi
-    fi
   done
 }
 
