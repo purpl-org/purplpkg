@@ -30,6 +30,7 @@ fi
 if [ "$1" == "" ]; then
   echo "purplpkg: missing operation"
   echo "Try: purplpkg --help" 
+  exit 1
 fi
 
 if [ "$1" == "--help" ]; then
@@ -39,9 +40,11 @@ if [ "$1" == "--help" ]; then
   echo "Commands:"
   echo "  install <package>    Install a package"
   echo "  remove <package>     Remove a package"
-  echo "  update               Update the mirror list"
-  echo "  upgrade              Updates all installed packages"
   echo "  utility <utility>    Performs a utility action"
+  echo "  update               Updates the mirror list"
+  echo "  upgrade              Updates all installed packages"
+  echo "  list-installed       Lists installed packages"
+  echo "  list-available       Lists available packages from the froggitti.net mirror"
   echo ""
   echo "Options:"
   echo "  --help               Show this message"
@@ -153,12 +156,27 @@ fi
 
 if [ "$1" == "utility" ]; then
   if [ "$2" == "" ]; then
-    echo "Enter a utility command."
+    echo "Enter a utility command. Available utility commands are:"
+    echo "install-wireos-recovery"
   elif [ "$2" == "install-wireos-recovery" ]; then
     curl --silent --fail -o "$BIN_DIR"/iwos.sh "$(sed -n '1p' "$MIRROR_TRACKING_FILE")"/recovery-images/wireos-recovery-ppkg/install.sh
     chmod +x "$BIN_DIR"/iwos.sh
     "$BIN_DIR"/iwos.sh
   fi
+fi
+
+if [ "$1" == "list-installed" ]; then
+  echo "Installed packages:"
+  ls "$FILE_TRACKING_DIR"
+fi
+
+if [ "$1" == "list-available" ]; then
+  curl https://www.froggitti.net/vector-mirror/package.list
+fi
+
+if [ "$1" != "utility" ] && [ "$1" != "install" ] && [ "$1" != "upgrade" ] && [ "$1" != "list-available" ] && [ "$1" != "update" ] && [ "$1" != "remove" ] && [ "$1" != "list-installed" ] && [ "$1" != "--help" ]; then
+  echo "Unknown command: "$1""
+  echo "Try purplpkg --help"
 fi
 
 ###############################################################
