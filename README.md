@@ -7,13 +7,10 @@ Packages are .tar.gz files with a .ppkg extension.
 Package structure should be similar to:
 
 ```
-fastfetch.ppkg
-    /fastfetch
-    /fastfetch-bin
-(end of fastfetch.ppkg)
+speedtest.ppkg
+    /speedtest (an executible armv7l binary)
+(end of speedtest.ppkg)
 ```
-
-fastfetch being a runner script for fastfetch-bin so that colors and ascii art are correct. If your binary can run stanalone this is not necessary.
 
 ## Versioning
 Just make a file titled your package name and .version for the extension. The version number can be whatever just make it make sense.
